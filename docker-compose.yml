@@ -1,0 +1,33 @@
+services:
+  # Servicio de la aplicación Spring Boot
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gsc-app
+    ports:
+      - "8080:8080"
+    environment:
+      # Apunta al nombre del servicio 'postgres' en lugar de 'localhost'
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gsc_db
+      SPRING_DATASOURCE_USERNAME: gsc_user
+      SPRING_DATASOURCE_PASSWORD: gsc_password
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # Servicio de la Base de Datos
+  postgres:
+    image: postgres:16-alpine
+    container_name: gsc-postgres
+    environment:
+      POSTGRES_DB: gsc_db
+      POSTGRES_USER: gsc_user
+      POSTGRES_PASSWORD: gsc_password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gsc_user -d gsc_db"]
+      interval: 3s
+      timeout: 3s
+      retries: 5
