@@ -23,11 +23,36 @@ GSC optimiza el préstamo individual de computadores para estudiantes y la reser
 
 ### Requisitos Previos
 
-* JDK 21+
-* Maven 3.9+
 * Docker y Docker Desktop
 * Git
+* JDK-17 (opcional para entorno de desarrollo)
 
+Para el despliegue Docker automáticamente usa las imágenes de Temurin JDK-17 y JRE-17.
+
+### Clonar el repositorio
+En el servidor (o en el entorno de desarrollo) abrir una ventana de consola y ejecutar:
+```console
+git clone https://github.com/angelapuzzle/GSC
+cd GSC
+```
+
+### Construir la imagen del servidor
+En la ventana de consola ejecutar:
+```console
+docker compose build
+```
+
+### Ejecutar la imagen del servidor
+En la ventana de consola ejecutar:
+```docker compose up```
+
+### Entorno de desarrollo
+Para el entorno de desarrollo puede ser conveniente usar JDK-17 fuera de Docker, en especial para la ejecución de pruebas
+En la ventana de consola ejecutar:
+```console
+docker compose up -d postgres
+./mvnw {args}
+```
 
 ## Equipo de Desarrollo
 
