@@ -10,7 +10,7 @@ GSC optimiza el préstamo individual de computadores para estudiantes y la reser
 
 ## Stack Tecnológico
 
-* **Lenguaje:** Java 21 LTS
+* **Lenguaje:** Java 17 LTS
 * **Framework Backend:** Spring Boot (Spring MVC, Tomcat embebido)
 * **Frontend:** Thymeleaf + HTML5/CSS3
 * **Base de Datos:** PostgreSQL
