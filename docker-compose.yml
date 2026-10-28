@@ -9,6 +9,11 @@ services:
       - "8080:8080"
     environment:
       # Apunta al nombre del servicio 'postgres' en lugar de 'localhost'
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_NAME: gsc_db
+      DB_USER: gsc_user
+      DB_PASSWORD: gsc_password
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gsc_db
       SPRING_DATASOURCE_USERNAME: gsc_user
       SPRING_DATASOURCE_PASSWORD: gsc_password
@@ -25,7 +30,7 @@ services:
       POSTGRES_USER: gsc_user
       POSTGRES_PASSWORD: gsc_password
     ports:
-      - "5432:5432"
+      - "5435:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U gsc_user -d gsc_db"]
       interval: 3s
