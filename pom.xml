@@ -43,6 +43,12 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- Thymeleaf (Motor de plantillas para la capa de presentación) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
         <!-- Dependencias de Testing (JUnit 5, Mockito, AssertJ) -->
         <!-- El scope 'test' indica que estas dependencias solo se utilizan para testing -->
         <dependency>
