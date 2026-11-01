@@ -1,0 +1,414 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+body,
+p,
+label,
+a {
+    font-family: Ancizar Sans, Tahoma, Geneva, sans-serif;
+    font-size: 14pt;
+}
+
+.m-0 {
+    margin: 0 !important;
+}
+
+header .section-icon {
+    margin-left: 2.5rem;
+}
+
+header .section-icon .banner-container {
+    position: absolute;
+    top: 0;
+    z-index: 10000;
+}
+
+.admin-header {
+    position: relative;
+    z-index: 100;
+    background: #fff;
+    font-family: inherit;
+    overflow: visible;
+}
+
+.icon-link {
+    --bs-neutral-0-rgb: 0,0,0;
+    background-color: #ffffff;
+    border-radius: 0 0 50% 50%;
+    display: flex;
+    font-size: 0;
+    line-height: 0;
+    padding-top: 0;
+    transition: width .1s ease-in 0s;
+    width: 6.25rem;
+    box-shadow: rgba(var(--bs-neutral-0-rgb),.3) 0 2px 3px 0,rgba(var(--bs-neutral-0-rgb),.15) 0 6px 10px 4px;
+    position: relative;
+}
+
+.icon-link img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+header #divider-top {
+    background-color: #3d4041;
+    height: 0.5rem;
+}
+
+#admin-header-content {
+    background: #677d29;
+    background-color: #677d29;
+    min-height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#admin-header-nav {
+    font-weight: 400 !important;
+    width: min(1180px, 100%);
+    padding-left: 155px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: clamp(3rem, 2vw, 2rem);
+    padding-right: clamp(3rem, 2vw, 2rem);
+}
+
+#admin-header-nav a {
+    text-decoration: none;
+    font-size: 14pt;
+    color: #ffffff
+}
+
+.main,main {
+    overflow: auto;
+    flex-grow: 1
+}
+
+:focus,:focus-visible {
+    outline-color: #000;
+    outline-offset: 2.5pt;
+    outline-width: 1pt;
+    border-color: #fff
+}
+
+.section-full {
+    min-height: calc(100vh - 88px)
+}
+
+body {
+    --bs-neutral-100: #ffffff;
+    margin: 0;
+    font-family: Ancizar Sans, Tahoma, Geneva, sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #151717;
+    background-color: #ffffff;
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: rgba(var(--bs-neutral-100),0);
+    transition: transform .3s ease,width .3s ease,height .3s ease;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    flex-grow: 1;
+    min-height: 100%
+}
+
+body,html {
+    height: 100%
+}
+
+
+.h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6 {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: 700;
+    line-height: 1.2
+}
+
+.h1,h1 {
+    font-size: calc(1.345rem + 1.14vw)
+}
+
+@media (min-width: 1200px) {
+    .h1,h1 {
+        font-size:2.2rem
+    }
+}
+
+.h2,h2 {
+    font-size: calc(1.325rem + .9vw)
+}
+
+@media (min-width: 1200px) {
+    .h2,h2 {
+        font-size:2rem
+    }
+}
+
+.h3,h3 {
+    font-size: calc(1.3rem + .6vw)
+}
+
+@media (min-width: 1200px) {
+    .h3,h3 {
+        font-size:1.75rem
+    }
+}
+
+.h4,h4 {
+    font-size: calc(1.275rem + .3vw)
+}
+
+@media (min-width: 1200px) {
+    .h4,h4 {
+        font-size:1.5rem
+    }
+}
+
+.h5,h5 {
+    font-size: 1.25rem
+}
+
+.h6,h6 {
+    font-size: 1.125rem
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: 1.25
+}
+
+abbr[title] {
+    -webkit-text-decoration: underline dotted;
+    text-decoration: underline dotted;
+    cursor: help;
+    -webkit-text-decoration-skip-ink: none;
+    text-decoration-skip-ink: none
+}
+
+address {
+    margin-bottom: 1rem;
+    font-style: normal;
+    line-height: inherit
+}
+
+ol,ul {
+    padding-left: 2rem
+}
+
+dl,ol,ul {
+    margin-top: 0;
+    margin-bottom: 1rem
+}
+
+ol ol,ol ul,ul ol,ul ul {
+    margin-bottom: 0
+}
+
+dt {
+    font-weight: 700
+}
+
+dd {
+    margin-bottom: .5rem;
+    margin-left: 0
+}
+
+blockquote {
+    margin: 0 0 1rem
+}
+
+b,strong {
+    font-weight: 850
+}
+
+.small,small {
+    font-size: .75rem
+}
+
+.mark,mark {
+    padding: .25rem .125rem;
+    color: var(--bs-primary-30);
+    background-color: var(--bs-primary-95)
+}
+
+sub,sup {
+    position: relative;
+    line-height: 0;
+    vertical-align: baseline
+}
+
+sub,sup {
+    font-size: .75em
+}
+
+sub {
+    bottom: -.25em
+}
+
+sup {
+    top: -.5em
+}
+
+code,kbd,pre,samp {
+    font-family: var(--bs-font-monospace)
+}
+
+code,kbd,pre,samp {
+    font-size: 1em
+}
+
+pre {
+    display: block;
+    margin: 0;
+    overflow: auto
+}
+
+pre {
+    font-size: .75rem
+}
+
+pre code {
+    color: inherit;
+    word-break: normal
+}
+
+pre code {
+    font-size: inherit
+}
+
+code {
+    color: var(--bs-code-color);
+    word-wrap: break-word
+}
+
+code {
+    font-size: .75rem
+}
+
+a>code {
+    color: inherit
+}
+
+kbd {
+    padding: .1875rem .375rem;
+    color: var(--bs-body-bg);
+    background-color: var(--bs-body-color)
+}
+
+kbd {
+    font-size: .75rem
+}
+
+kbd {
+    border-radius: .25rem
+}
+
+kbd kbd {
+    padding: 0
+}
+
+kbd kbd {
+    font-size: 1em
+}
+
+figure {
+    margin: 0 0 1rem
+}
+
+img,svg {
+    vertical-align: middle
+}
+
+table {
+    caption-side: bottom;
+    border-collapse: collapse
+}
+
+caption {
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    color: var(--bs-primary-80);
+    text-align: left
+}
+
+th {
+    text-align: inherit;
+    text-align: -webkit-match-parent
+}
+
+tbody,td,tfoot,th,thead,tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0
+}
+
+label {
+    display: inline-block;
+    line-height: 1
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+@font-face {
+    font-family: "Muli";
+    src: url("./fonts/muli-latin-variable.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 200 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Material Symbols Outlined";
+    src: url("./material-symbols-outlined.ttf") format("truetype");
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+}
+
+@font-face {
+    font-family: "Ancizar Sans";
+    src: url("../fonts/ancizar_sans-regular-webfont.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ancizar Sans";
+    src: url("../fonts/ancizar_sans-bold-webfont.woff2") format("woff2");
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ancizar Sans";
+    src: url("../fonts/ancizar_sans-regular_italic-webfont.woff2") format("woff2");
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Ancizar Sans";
+    src: url("../fonts/ancizar_sans-bold_italic-webfont.woff2") format("woff2");
+    font-style: italic;
+    font-weight: 700;
+    font-display: swap;
+}
