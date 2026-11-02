@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSC - Monitoreo de Sala</title>
+    
+    <th:block th:replace="~{fragments/head :: head('GSC - Monitoreo de Sala')}"></th:block>
+    
+    <style>
+        .monitoreo-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 750px;
+            width: 100%;
+        }
+
+        .monitoreo-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .monitoreo-tabla th, .monitoreo-tabla td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .monitoreo-tabla th { 
+            background-color: #f9fafb; 
+            color: #374151; 
+            font-weight: 600; 
+        }
+
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .status-libre {
+            background-color: #def7ec;
+            color: #03543f;
+        }
+        .status-ocupado {
+            background-color: #feecdc;
+            color: #b45309;
+        }
+        .status-mantenimiento {
+            background-color: #fde8e8;
+            color: #9b1c1c;
+        }
+    </style>
+</head>
+<body style="background-color: #f3f4f6;">
+
+    <div th:replace="~{fragments/header :: admin-header}"></div>
+
+    <div style="display: flex; justify-content: center; padding: 3rem 2rem; box-sizing: border-box;">
+        <div class="monitoreo-panel">
+            <h2 style="color: #677d29; margin-top: 0; font-size: 22px;">Estado Actual de la Sala de Cómputo</h2>
+            
+            <div style="display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                
+                <div style="flex: 1; min-width: 150px; background: #e5e7eb; border: 1px solid #d1d5db; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                    <span style="font-size: 24px; font-weight: bold; color: #374151;" 
+                          th:text="${#lists.size(computadoresSala)}"></span>
+                    <p style="margin-top: 0.5rem; font-size: 11px; color: #374151; font-weight: 600; text-transform: uppercase;">Total Equipos</p>
+                </div>
+
+                <div style="flex: 1; min-width: 150px; background: #def7ec; border: 1px solid #bcf0da; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                    <span style="font-size: 24px; font-weight: bold; color: #03543f;"
+                          th:text="${#lists.size(computadoresSala.?[estado == 'LIBRE'])}"></span>
+                    <p style="margin-top: 0.5rem; font-size: 11px; color: #03543f; font-weight: 600; text-transform: uppercase;">Disponibles</p>
+                </div>
+
+                <div style="flex: 1; min-width: 150px; background: #feecdc; border: 1px solid #fbd5d5; padding: 1.5rem; border-radius: 8px; text-align: center;">
+                    <span style="font-size: 24px; font-weight: bold; color: #b45309;"
+                          th:text="${#lists.size(computadoresSala.?[estado == 'OCUPADO'])}"></span>
+                    <p style="margin-top: 0.5rem; font-size: 11px; color: #b45309; font-weight: 600; text-transform: uppercase;">Ocupados</p>
+                </div>
+
+            </div>
+
+            <table class="monitoreo-tabla">
+                <thead>
+                    <tr>
+                        <th>Computador</th>
+                        <th>Ubicación / Puesto</th>
+                        <th>Estado del Equipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pc : ${computadoresSala}">
+                        <td th:text="${pc.nombre}"></td>
+                        <td th:text="${pc.puesto}"></td>
+                        <td>
+                            <span class="status-badge" 
+                                  th:classappend="${pc.estado == 'LIBRE' ? 'status-libre' : (pc.estado == 'OCUPADO' ? 'status-ocupado' : 'status-mantenimiento')}"
+                                  th:text="${pc.estado}">
+                            
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>
