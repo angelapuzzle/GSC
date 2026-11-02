@@ -8,8 +8,7 @@ services:
     ports:
       - "8080:8080"
     environment:
-      # Apunta al nombre del servicio 'postgres' en lugar de 'localhost'
-      DB_HOST: localhost
+      DB_HOST: postgres
       DB_PORT: 5432
       DB_NAME: gsc_db
       DB_USER: gsc_user
