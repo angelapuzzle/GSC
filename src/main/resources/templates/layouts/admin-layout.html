@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title)">
+
+<!-- Llamamos al fragmento head y le pasamos el título -->
+<head th:replace="~{fragments/head :: head (${title} ?: 'Layout Panel Administracion')}"></head>
+
+<body>
+    <header th:replace="~{fragments/header :: admin-header}"></header>
+</body>
+</html>

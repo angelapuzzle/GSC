@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSC - Registro de Estudiante</title>
+    
+    <th:block th:replace="~{fragments/head :: head('GSC - Registro de Estudiante')}"></th:block>
+    
+    <style>
+        .reg-box {
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .campo-grupo {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .campo-grupo label {
+            display: block;
+            margin-bottom: 6px;
+            color: #4b5563;
+            font-weight: 600;
+        }
+        .campo-grupo input, .campo-grupo select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .campo-grupo input:focus, .campo-grupo select:focus {
+            outline: none;
+            border-color: #677d29;
+        }
+        .btn-registro {
+            background-color: #677d29;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-registro:hover {
+            background-color: #526420;
+        }
+        .msg-resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        .msg-exito { 
+            background-color: #def7ec;
+            color: #03543f; 
+            border: 1px solid #bcf0da; 
+        }
+        .msg-error { 
+            background-color: #fde8e8; 
+            color: #9b1c1c; border: 1px solid #fbd5d5; 
+        }
+    </style>
+</head>
+<body style="background-color: #f3f4f6;">
+
+    <div th:replace="~{fragments/header :: admin-header}"></div>
+
+    <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
+        <div class="reg-box">
+            <h2 style="color: #677d29; text-align: center; font-size: 24px;">Ingreso a Sala de Cómputo</h2>
+            
+            <form th:action="@{/template_test/registrar}" method="post">
+                <div class="campo-grupo">
+                    <label>Seriado de Documento:</label>
+                    <input type="text" name="documento" placeholder="Ej: 0123456789" required>
+                </div>
+                <div class="campo-grupo">
+                    <label>¿Dónde te quieres sentar?</label>
+                    <select name="asiento" required>
+                        <option value="" disabled selected>-- Elige un puesto --</option>
+                        <option th:each="pc : ${equiposDisponibles}" th:value="${pc.id}" th:text="${pc.asiento}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-registro">Registrar Ingreso</button>
+            </form>
+
+            <div class="msg-resultado msg-exito" th:if="${resultado == 'bienvenido'}">
+                <h3>¡Bienvenido(a)!</h3>
+                <p>Tu ingreso ha sido registrado correctamente.</p>
+            </div>
+            <div class="msg-resultado msg-error" th:if="${resultado == 'no_admitido'}">
+                <h3>Acceso Denegado</h3>
+                <p>Por favor verifica tus datos.</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
