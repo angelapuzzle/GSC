@@ -76,30 +76,56 @@
 
     <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
         <div class="reg-box">
-            <h2 style="color: #677d29; text-align: center; font-size: 24px;">Ingreso a Sala de Cómputo</h2>
+            <h2 style="color: #677d29; text-align: center; font-size: 24px;">Registro en Sala de Cómputo</h2>
             
-            <form th:action="@{/template_test/registrar}" method="post">
+                        <form th:action="@{/sala/registrar}" method="post">
+                <div class="campo-grupo">
+                    <label>¿Qué vas a hacer?</label>
+                    <select name="tipoAccion" required>
+                        <option value="INGRESO">Ingresar a la sala</option>
+                        <option value="SALIDA">Salir de la sala</option>
+                    </select>
+                </div>
+
                 <div class="campo-grupo">
                     <label>Seriado de Documento:</label>
                     <input type="text" name="documento" placeholder="Ej: 0123456789" required>
                 </div>
+
                 <div class="campo-grupo">
                     <label>¿Dónde te quieres sentar?</label>
-                    <select name="asiento" required>
+                    <select name="equipoSeleccionado" required>
                         <option value="" disabled selected>-- Elige un puesto --</option>
-                        <option th:each="pc : ${equiposDisponibles}" th:value="${pc.id}" th:text="${pc.asiento}"></option>
+                        <th:block th:each="pc : ${todosLosEquipos}">
+                            <option th:if="${pc.disponibilidad.name() != 'MANTENIMIENTO'}" 
+                                    th:value="${pc.sala.idSala + '-' + pc.numComputador}" 
+                                    th:text="${'Sala ' + pc.sala.idSala + ' - PC ' + pc.numComputador + ' (' + pc.disponibilidad + ')'}">
+                            </option>
+                        </th:block>
                     </select>
                 </div>
-                <button type="submit" class="btn-registro">Registrar Ingreso</button>
+
+                <button type="submit" class="btn-registro">Confirmar</button>
             </form>
 
             <div class="msg-resultado msg-exito" th:if="${resultado == 'bienvenido'}">
                 <h3>¡Bienvenido(a)!</h3>
                 <p>Tu ingreso ha sido registrado correctamente.</p>
             </div>
+
             <div class="msg-resultado msg-error" th:if="${resultado == 'no_admitido'}">
-                <h3>Acceso Denegado</h3>
-                <p>Por favor verifica tus datos.</p>
+                <h3>No Admitido</h3>
+                <p>No se pudo registrar el ingreso. Verifica tus datos.</p>
+            </div>
+
+            <div class="msg-resultado msg-exito" th:if="${resultado == 'salida_registrada'}">
+                <h3>Salida Registrada</h3>
+                <p>Tu salida se registró con éxito.</p>
+            </div>
+
+            <div class="msg-resultado msg-error" th:if="${resultado == 'salida_no_registrada'}">
+                <h3>Salida No Registrada</h3>
+                <p>No tienes una sesión activa.</p>
             </div>
         </div>
     </div>
