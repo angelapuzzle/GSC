@@ -1,6 +1,9 @@
 package com.gsc.gsc.service;
 
 import org.springframework.stereotype.Service;
+
+import com.gsc.gsc.exception.InvalidUserStateException;
+import com.gsc.gsc.exception.ResourceNotFoundException;
 import com.gsc.gsc.model.Usuario;
 import com.gsc.gsc.repository.UsuarioRepository;
 
@@ -16,10 +19,10 @@ public class IDValidationService {
 
     public Usuario validateActiveUserBySerialIdentidad(String serialIdentidad) {
         Usuario usuario = usuarioRepository.findById(serialIdentidad)
-        .orElseThrow(() -> new IllegalArgumentException("El usuario con serialIdentidad " + serialIdentidad + " no existe."));
+        .orElseThrow(() -> new ResourceNotFoundException("El usuario con serialIdentidad " + serialIdentidad + " no existe."));
 
         if (!usuario.getActivo()) {
-            throw new IllegalArgumentException("El usuario con serialIdentidad " + serialIdentidad + " no está activo.");
+            throw new InvalidUserStateException("El usuario con serialIdentidad " + serialIdentidad + " no está activo.");
         }
         
         return usuario;
