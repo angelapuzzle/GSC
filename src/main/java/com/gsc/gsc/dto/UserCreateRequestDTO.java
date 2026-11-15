@@ -3,6 +3,7 @@ package com.gsc.gsc.dto;
 import com.gsc.gsc.model.enums.CargoUsuario;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -20,10 +21,10 @@ public class UserCreateRequestDTO{
     @Pattern(regexp = "^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$", message = "El apellido solo puede contener letras y espacios")
     private String apellido;
 
-    @NotBlank (message = "El estado del usuario no puede estar vacío.")
+    @NotNull (message = "El estado del usuario no puede ser nulo.")
     private Boolean activo;
 
-    @NotBlank (message = "El cargo del usuario no puede estar vacío.")
+    @NotNull (message = "El cargo del usuario no puede ser nulo.")
     private CargoUsuario cargo;
 
     public String getSerialIdentidad() {
