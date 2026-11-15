@@ -17,19 +17,6 @@ public class RoomBookingController {
         // List<Reserva> listaReservas = reservaRepository.findAll();
         // model.addAttribute("reservas", listaReservas);
         
-        return "room-booking/index"; 
-    }
-
-    @PostMapping("/guardar")
-    public String guardarReserva(@RequestParam("fecha") String fecha,
-                                 @RequestParam("horaInicio") String horaInicio,
-                                 @RequestParam("asunto") String asunto,
-                                 @RequestParam("sala") String sala) {
-        
-        // TODO: Función temporal de guardado (Aún no interactúa con la base de datos SQL)
-        System.out.println("Guardando reserva simulada para: " + fecha + " a las " + horaInicio);
-        
-        // Redirige de vuelta a la vista de reservas tras el envío
-        return "room-booking/index";
+        return "views/RoomBookingGUI"; 
     }
 }
