@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<!-- Integración de la plantilla head.html[cite: 1] -->
+<head th:replace="~{fragments/head :: head('Reserva de Salas - GSC')}"></head>
+
+<style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+    }
+
+    .calendar-container {
+        width: 98%;
+        max-width: 1900px;
+        height: calc(100vh - 90px);
+        margin: 10px auto;
+        padding: 0 5px;
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    .calendar-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        background: #f8f9fa;
+        padding: 8px 15px;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        flex-shrink: 0;
+    }
+
+    .btn-group button {
+        background-color: #ffffff;
+        border: 1px solid #6c757d;
+        color: #333;
+        padding: 6px 14px;
+        cursor: pointer;
+        border-radius: 3px;
+        margin-right: 2px;
+        font-weight: 500;
+    }
+
+    .btn-group button.active, .btn-primary {
+        background-color: #681827;
+        color: white;
+        border-color: #681827;
+    }
+
+    .week-table-container {
+        flex: 1;
+        overflow-y: auto;
+        border: 1px solid #c8ced3;
+        border-radius: 4px;
+        background: #fff;
+    }
+
+    .week-table {
+        width: 100%;
+        height: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .week-table th, .week-table td {
+        border: 1px solid #e0e0e0;
+        text-align: center;
+        position: relative;
+        font-size: 13px;
+        box-sizing: border-box;
+    }
+
+    .week-table tbody tr {
+        height: 65px;
+        min-height: 65px;
+    }
+
+    .week-table th {
+        background-color: #f1f3f5;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        padding: 10px 0;
+        font-weight: bold;
+        height: 45px;
+    }
+
+    .week-table td.time-col {
+        width: 90px;
+        background-color: #fafafa;
+        font-weight: bold;
+        color: #555;
+        font-size: 12px;
+    }
+
+    .week-cell {
+        cursor: pointer;
+        position: relative;
+        padding: 0 !important;
+        vertical-align: top;
+    }
+
+    .week-cell:hover {
+        background-color: #f0f7ff;
+    }
+
+    .reservation-block {
+        position: absolute;
+        left: 0;
+        width: 100%;
+        background-color: #1a73e8;
+        color: white;
+        padding: 4px 6px;
+        border-radius: 2px;
+        font-size: 11px;
+        text-align: left;
+        cursor: grab;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        z-index: 5;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        box-sizing: border-box;
+    }
+
+    .reservation-block:active {
+        cursor: grabbing;
+    }
+
+    .month-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        flex: 1;
+        border-left: 1px solid #e0e0e0;
+        border-top: 1px solid #e0e0e0;
+        background: #fff;
+    }
+
+    .month-header-cell {
+        background: #f1f3f5;
+        text-align: center;
+        padding: 8px 0;
+        font-weight: bold;
+        border-right: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 13px;
+    }
+
+    .month-day-cell {
+        background: #fff;
+        border-right: 1px solid #e0e0e0;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 6px;
+        cursor: pointer;
+        position: relative;
+        overflow-y: auto;
+    }
+
+    .month-day-cell:hover {
+        background-color: #f9fbfd;
+    }
+
+    .day-number {
+        text-align: right;
+        color: #8b0000;
+        font-weight: bold;
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .modal-backdrop {
+        display: none;
+        position: fixed;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-card {
+        background: white;
+        padding: 24px;
+        border-radius: 6px;
+        width: 380px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        position: relative;
+    }
+
+    .modal-card h3 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+        text-align: left;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 12px;
+        margin-bottom: 4px;
+        color: #555;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 6px 8px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .error-msg {
+        color: #d93025;
+        font-size: 12px;
+        margin-bottom: 10px;
+        display: none;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+    }
+
+    .btn-danger {
+        background-color: #d93025;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 3px;
+        cursor: pointer;
+        font-weight: 500;
+        display: none;
+    }
+    .btn-danger:hover { background-color: #b31412; }
+
+    .hidden { display: none !important; }
+</style>
+
+<body>
+
+    <!-- Integración del header[cite: 2] -->
+    <header th:replace="~{fragments/header :: admin-header}"></header>
+
+    <div class="calendar-container">
+        
+        <!-- Toolbar de navegación y vistas -->
+        <div class="calendar-toolbar">
+            <div class="btn-group">
+                <button id="btn-week" class="active" onclick="switchView('week')">Semana</button>
+                <button id="btn-month" onclick="switchView('month')">Mes</button>
+            </div>
+            <div style="font-weight: bold; color: #444; font-size: 16px;" id="calendar-title">
+                Vista de Horarios - Salas GSC
+            </div>
+            <div>
+                <button class="btn-primary" onclick="openModal('', '07:00')">+ Nueva Reserva</button>
+            </div>
+        </div>
+
+        <!-- VISTA SEMANAL -->
+        <div id="week-view" class="week-table-container">
+            <table class="week-table">
+                <thead>
+                    <tr>
+                        <th style="width: 90px;">Hora</th>
+                        <th data-day-index="0">Lunes</th>
+                        <th data-day-index="1">Martes</th>
+                        <th data-day-index="2">Miércoles</th>
+                        <th data-day-index="3">Jueves</th>
+                        <th data-day-index="4">Viernes</th>
+                        <th data-day-index="5">Sábado</th>
+                        <th data-day-index="6">Domingo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <script>
+                        const hours = ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00'];
+                        const dates = ['2026-11-02', '2026-11-03', '2026-11-04', '2026-11-05', '2026-11-06', '2026-11-07', '2026-11-08'];
+                        
+                        document.write(hours.map(h => `
+                            <tr data-hour="${h}">
+                                <td class="time-col">${h}</td>
+                                ${dates.map((d, index) => `
+                                    <td class="week-cell" data-date="${d}" data-time="${h}" data-day="${index}" 
+                                        ondragover="allowDrop(event)" ondrop="dropReservation(event, '${d}', '${h}')"
+                                        onclick="openModal('${d}', '${h}')">
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        `).join(''));
+                    </script>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- VISTA MENSUAL -->
+        <div id="month-view" class="month-grid hidden">
+            <div class="month-header-cell">Lunes</div>
+            <div class="month-header-cell">Martes</div>
+            <div class="month-header-cell">Miércoles</div>
+            <div class="month-header-cell">Jueves</div>
+            <div class="month-header-cell">Viernes</div>
+            <div class="month-header-cell">Sábado</div>
+            <div class="month-header-cell">Domingo</div>
+
+            <script>
+                for(let i=1; i<=30; i++) {
+                    let formattedDay = String(i).padStart(2, '0');
+                    document.write(`
+                        <div class="month-day-cell" data-date="2026-11-${formattedDay}" 
+                             onclick="openModal('2026-11-${formattedDay}', '07:00')">
+                            <div class="day-number">${i}</div>
+                        </div>
+                    `);
+                }
+            </script>
+        </div>
+
+    </div>
+
+    <!-- MODAL PARA NUEVA O EDITAR RESERVA -->
+    <div id="booking-modal" class="modal-backdrop">
+        <div class="modal-card">
+            <h3 id="modal-title">Registrar Nueva Reserva</h3>
+            <div id="error-message" class="error-msg"></div>
+            <form id="reservation-form" onsubmit="handleFormSubmit(event)">
+                <input type="hidden" id="reservation-id">
+                <div class="form-group">
+                    <label for="solicitante">Solicitante de la Reserva:</label>
+                    <input type="text" id="solicitante" name="solicitante" placeholder="Ej. Prof. Andrea Abril" required>
+                </div>
+                <div class="form-group">
+                    <label for="asunto">Asignatura / Motivo:</label>
+                    <input type="text" id="asunto" name="asunto" placeholder="Ej. Redes de Computadores" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-fecha">Fecha:</label>
+                    <input type="date" id="modal-fecha" name="fecha" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-hora-inicio">Hora de Inicio (07:00 a 21:00):</label>
+                    <input type="time" id="modal-hora-inicio" name="horaInicio" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-hora-fin">Hora de Finalización (07:00 a 21:00):</label>
+                    <input type="time" id="modal-hora-fin" name="horaFin" required>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" id="btn-delete" class="btn-danger" onclick="triggerDelete()">Eliminar</button>
+                    <div style="display: flex; gap: 8px;">
+                        <button type="button" class="btn-group" onclick="closeModal()">Cancelar</button>
+                        <button type="submit" class="btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Lógica JavaScript -->
+    <script>
+        let reservations = [];
+        let editingId = null;
+
+        window.addEventListener('resize', () => {
+            if (!document.getElementById('week-view').classList.contains('hidden')) {
+                renderCalendarEvents();
+            }
+        });
+
+        function switchView(viewType) {
+            const weekContainer = document.getElementById('week-view');
+            const monthView = document.getElementById('month-view');
+            const btnWeek = document.getElementById('btn-week');
+            const btnMonth = document.getElementById('btn-month');
+
+            if (viewType === 'week') {
+                weekContainer.classList.remove('hidden');
+                monthView.classList.add('hidden');
+                btnWeek.classList.add('active');
+                btnMonth.classList.remove('active');
+                renderCalendarEvents();
+            } else {
+                weekContainer.classList.add('hidden');
+                monthView.classList.remove('hidden');
+                btnMonth.classList.add('active');
+                btnWeek.classList.remove('active');
+            }
+        }
+
+        // Función auxiliar para calcular automáticamente una hora después
+        function addOneHour(timeStr) {
+            let [h, m] = timeStr.split(':').map(Number);
+            h = (h + 1) % 24;
+            return String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0');
+        }
+
+        function openModal(fecha, horaInicio, id = null) {
+            editingId = id;
+            document.getElementById('error-message').style.display = 'none';
+            const deleteBtn = document.getElementById('btn-delete');
+
+            if (id) {
+                const res = reservations.find(r => r.id === id);
+                document.getElementById('modal-title').innerText = "Editar Reserva";
+                document.getElementById('solicitante').value = res.solicitante;
+                document.getElementById('asunto').value = res.asunto;
+                document.getElementById('modal-fecha').value = res.fecha;
+                document.getElementById('modal-hora-inicio').value = res.horaInicio;
+                document.getElementById('modal-hora-fin').value = res.horaFin;
+                deleteBtn.style.display = 'block';
+            } else {
+                document.getElementById('modal-title').innerText = "Registrar Nueva Reserva";
+                document.getElementById('solicitante').value = '';
+                document.getElementById('asunto').value = '';
+                document.getElementById('modal-fecha').value = fecha || '2026-11-03';
+                
+                const inicio = horaInicio || '07:00';
+                document.getElementById('modal-hora-inicio').value = inicio;
+                // Asigna automáticamente una hora después para la finalización por defecto
+                document.getElementById('modal-hora-fin').value = addOneHour(inicio);
+                
+                deleteBtn.style.display = 'none';
+            }
+            document.getElementById('booking-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('booking-modal').style.display = 'none';
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            const solicitante = document.getElementById('solicitante').value;
+            const asunto = document.getElementById('asunto').value;
+            const fecha = document.getElementById('modal-fecha').value;
+            const horaInicio = document.getElementById('modal-hora-inicio').value;
+            const horaFin = document.getElementById('modal-hora-fin').value;
+
+            const [h1, m1] = horaInicio.split(':').map(Number);
+            const [h2, m2] = horaFin.split(':').map(Number);
+            const startTotalMins = h1 * 60 + m1;
+            const endTotalMins = h2 * 60 + m2;
+
+            const errorBox = document.getElementById('error-message');
+
+            const minAllowed = 7 * 60;   // 07:00
+            const maxAllowed = 21 * 60;  // 21:00
+
+            if (endTotalMins <= startTotalMins) {
+                errorBox.innerText = "Error: La hora de finalización debe ser posterior a la hora de inicio.";
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            if (startTotalMins < minAllowed || endTotalMins > maxAllowed) {
+                errorBox.innerText = "Error: Las reservas deben estar comprendidas estrictamente entre las 07:00 y las 21:00.";
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            if (editingId) {
+                const res = reservations.find(r => r.id === editingId);
+                res.solicitante = solicitante;
+                res.asunto = asunto;
+                res.fecha = fecha;
+                res.horaInicio = horaInicio;
+                res.horaFin = horaFin;
+                
+                actualizarReservaSalaSQL(res);
+            } else {
+                const newRes = {
+                    id: Date.now().toString(),
+                    solicitante, asunto, fecha, horaInicio, horaFin
+                };
+                reservations.push(newRes);
+            }
+
+            closeModal();
+            renderCalendarEvents();
+        }
+
+        function actualizarReservaSalaSQL(reserva) {
+            console.log("-> [SQL MOCK] actualizarReservaSalaSQL ejecutado:", reserva);
+        }
+
+        function eliminarReservaSalaSQL(id) {
+            console.log("-> [SQL MOCK] eliminarReservaSalaSQL ejecutado para ID:", id);
+        }
+
+        function triggerDelete() {
+            if (editingId) {
+                eliminarReservaSalaSQL(editingId);
+                reservations = reservations.filter(r => r.id !== editingId);
+                closeModal();
+                renderCalendarEvents();
+            }
+        }
+
+        function renderCalendarEvents() {
+            document.querySelectorAll('.week-cell').forEach(cell => cell.innerHTML = '');
+
+            document.querySelectorAll('.month-day-cell').forEach(cell => {
+                const num = cell.querySelector('.day-number');
+                cell.innerHTML = '';
+                if(num) cell.appendChild(num);
+            });
+
+            reservations.forEach(res => {
+                const [h1, m1] = res.horaInicio.split(':').map(Number);
+                const [h2, m2] = res.horaFin.split(':').map(Number);
+
+                const baseHourStr = String(h1).padStart(2, '0') + ':00';
+                const targetCell = document.querySelector(`.week-cell[data-date="${res.fecha}"][data-time="${baseHourStr}"]`);
+
+                if (targetCell) {
+                    const cellHeight = targetCell.offsetHeight || 65;
+                    const topPercent = (m1 / 60) * 100;
+                    const durationMinutes = (h2 * 60 + m2) - (h1 * 60 + m1);
+                    const heightPixels = (durationMinutes / 60) * cellHeight;
+
+                    const block = document.createElement('div');
+                    block.className = 'reservation-block';
+                    block.style.top = `${topPercent}%`;
+                    block.style.height = `${Math.max(heightPixels - 2, 22)}px`;
+                    block.draggable = true;
+
+                    block.innerHTML = `<b>${res.horaInicio} - ${res.horaFin}</b><br/><b>${res.solicitante}</b><br/>${res.asunto}`;
+
+                    block.ondragstart = (e) => {
+                        e.dataTransfer.setData('text/plain', res.id);
+                    };
+
+                    block.onclick = (e) => {
+                        e.stopPropagation();
+                        openModal(res.fecha, res.horaInicio, res.id);
+                    };
+
+                    targetCell.appendChild(block);
+                }
+
+                // Vista Mensual
+                const monthCell = document.querySelector(`.month-day-cell[data-date="${res.fecha}"]`);
+                if (monthCell) {
+                    const mBlock = document.createElement('div');
+                    mBlock.style.background = '#1a73e8';
+                    mBlock.style.color = 'white';
+                    mBlock.style.fontSize = '10px';
+                    mBlock.style.padding = '2px 4px';
+                    mBlock.style.borderRadius = '3px';
+                    mBlock.style.marginBottom = '2px';
+                    mBlock.style.cursor = 'pointer';
+                    mBlock.innerText = `${res.horaInicio} - ${res.horaFin} ${res.asunto} (${res.solicitante})`;
+                    mBlock.onclick = (e) => {
+                        e.stopPropagation();
+                        openModal(res.fecha, res.horaInicio, res.id);
+                    };
+                    monthCell.appendChild(mBlock);
+                }
+            });
+        }
+
+        function allowDrop(event) {
+            event.preventDefault();
+        }
+
+        function dropReservation(event, newDate, newTimeSlot) {
+            event.preventDefault();
+            const id = event.dataTransfer.getData('text/plain');
+            const res = reservations.find(r => r.id === id);
+            
+            if (res) {
+                const [oh1, om1] = res.horaInicio.split(':').map(Number);
+                const [oh2, om2] = res.horaFin.split(':').map(Number);
+                let durationMinutes = (oh2 * 60 + om2) - (oh1 * 60 + om1);
+                if (durationMinutes <= 0) durationMinutes = 60;
+
+                let discreteHour = newTimeSlot.split(':')[0] + ':00';
+                const [nh1] = discreteHour.split(':').map(Number);
+                
+                let newStartTotalMins = nh1 * 60;
+                let newEndTotalMins = newStartTotalMins + durationMinutes;
+
+                const maxAllowed = 21 * 60; // 21:00
+
+                if (newEndTotalMins > maxAllowed) {
+                    alert("Acción no permitida: El bloque excede el límite horario de las 21:00.");
+                    return;
+                }
+
+                res.fecha = newDate;
+                res.horaInicio = discreteHour;
+
+                let endH = Math.floor(newEndTotalMins / 60);
+                let endM = newEndTotalMins % 60;
+                res.horaFin = String(endH).padStart(2, '0') + ':' + String(endM).padStart(2, '0');
+
+                actualizarReservaSalaSQL(res);
+                renderCalendarEvents();
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('booking-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
