@@ -5,18 +5,43 @@ import com.gsc.gsc.repository.UsuarioRepository;
 
 import com.gsc.gsc.dto.UserCreateRequestDTO;
 import com.gsc.gsc.dto.UserPatchRequestDTO;
+import com.gsc.gsc.exception.InvalidUserStateException;
+import com.gsc.gsc.exception.ResourceAlreadyExistsException;
 import com.gsc.gsc.exception.ResourceNotFoundException;
 
 @Service
-public class UserService {
+public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    UserService(UsuarioRepository usuarioRepository) {
+    UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
+    public Usuario obtenerUsuario(String serialIdentidad) {
+        return usuarioRepository.findById(serialIdentidad)
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario con serialIdentidad " + serialIdentidad + " no existe."));
+    }
+
+    public void validarUsuarioActivo(Usuario usuario) {
+        if (usuario == null) {
+            throw new IllegalArgumentException("El usuario no puede ser nulo.");
+        }
+        if (usuario.getActivo() == null || !usuario.getActivo()) {
+            throw new InvalidUserStateException("El usuario con serialIdentidad " + usuario.getSerialIdentidad() + " no está activo.");
+        }
+    }
+    public void validarUsuarioActivo(String serialIdentidad) {
+        Usuario usuario = obtenerUsuario(serialIdentidad);
+        validarUsuarioActivo(usuario);
+    }
+
     public Usuario crearUsuario(UserCreateRequestDTO dto) {
+
+        if (usuarioRepository.existsById(dto.getSerialIdentidad())) {
+            throw new ResourceAlreadyExistsException("El usuario con serialIdentidad " + dto.getSerialIdentidad() + " ya existe.");
+        }
+
         Usuario usuario = new Usuario();
 
         usuario.setSerialIdentidad(dto.getSerialIdentidad());
@@ -48,5 +73,12 @@ public class UserService {
 
         // 3. Guardamos los cambios
         return usuarioRepository.save(usuarioExistente);
+    }
+
+    public void eliminarUsuario(String serialIdentidad) {
+        Usuario usuarioExistente = usuarioRepository.findById(serialIdentidad)
+                .orElseThrow(() -> new ResourceNotFoundException("El usuario con serialIdentidad " + serialIdentidad + " no existe."));
+
+        usuarioRepository.delete(usuarioExistente);
     }
 }
