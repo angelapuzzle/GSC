@@ -10,6 +10,5 @@ import java.util.List;
 @Repository
 public interface RoomBookingRepository extends JpaRepository<ReservaSala, Long> {
 
-    // Cambió a String (idSala) para que coincida con la entidad Sala
     List<ReservaSala> findBySala_IdSalaAndFecha(String idSala, LocalDate fecha);
 }
