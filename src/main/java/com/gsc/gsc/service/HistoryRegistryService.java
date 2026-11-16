@@ -1,31 +1,38 @@
 package com.gsc.gsc.service;
 
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.gsc.gsc.model.HistoryRegistry;
-import com.gsc.gsc.repository.HistoryRegistryRepository;
-
-import java.util.List;
+import com.gsc.gsc.model.ReservaComputador;
+import com.gsc.gsc.repository.ReservaComputadorRepository;
 
 @Service
 public class HistoryRegistryService {
 
     @Autowired
-    private HistoryRegistryRepository repository;
+    private ReservaComputadorRepository reservaComputadorRepository;
 
-    public HistoryRegistry registrar(String usuarioId, String accion, String detalle) {
-        HistoryRegistry registro = new HistoryRegistry();
-        registro.setUsuarioId(usuarioId);
-        registro.setAccion(accion);
-        registro.setDetalle(detalle);
-        return repository.save(registro);
+    public List<ReservaComputador> obtenerHistorial(LocalDate fecha) {
+        List<ReservaComputador> reservas = reservaComputadorRepository.findAll();
+        if (fecha != null) {
+            return reservas.stream()
+                    .filter(r -> fecha.equals(r.getFecha()))
+                    .collect(Collectors.toList());
+        }
+        return reservas;
     }
 
-    public List<HistoryRegistry> obtenerTodos() {
-        return repository.findAll();
+    public Optional<ReservaComputador> obtenerPorId(Long idReserva) {
+        return reservaComputadorRepository.findById(idReserva);
     }
 
-    public List<HistoryRegistry> obtenerPorUsuario(String usuarioId) {
-        return repository.findByUsuarioId(usuarioId);
+    public Optional<ReservaComputador> agregarComentario(Long idReserva, String comentario) {
+        return reservaComputadorRepository.findById(idReserva).map(reserva -> {
+            reserva.setComentarios(comentario);
+            return reservaComputadorRepository.save(reserva);
+        });
     }
 }
