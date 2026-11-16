@@ -351,11 +351,11 @@
                     <input type="date" id="modal-fecha" name="fecha" required>
                 </div>
                 <div class="form-group">
-                    <label for="modal-hora-inicio">Hora de Inicio (07:00 a 21:00):</label>
+                    <label for="modal-hora-inicio">Hora de Inicio (07:00 a 20:00):</label>
                     <input type="time" id="modal-hora-inicio" name="horaInicio" required>
                 </div>
                 <div class="form-group">
-                    <label for="modal-hora-fin">Hora de Finalización (07:00 a 21:00):</label>
+                    <label for="modal-hora-fin">Hora de Finalización (07:00 a 20:00):</label>
                     <input type="time" id="modal-hora-fin" name="horaFin" required>
                 </div>
                 <div class="modal-actions">
@@ -458,7 +458,7 @@
             const errorBox = document.getElementById('error-message');
 
             const minAllowed = 7 * 60;   // 07:00
-            const maxAllowed = 21 * 60;  // 21:00
+            const maxAllowed = 20 * 60;  // 20:00
 
             if (endTotalMins <= startTotalMins) {
                 errorBox.innerText = "Error: La hora de finalización debe ser posterior a la hora de inicio.";
@@ -594,7 +594,7 @@
                 let newStartTotalMins = nh1 * 60;
                 let newEndTotalMins = newStartTotalMins + durationMinutes;
 
-                const maxAllowed = 21 * 60; // 21:00
+                const maxAllowed = 20 * 60; // 21:00
 
                 if (newEndTotalMins > maxAllowed) {
                     alert("Acción no permitida: El bloque excede el límite horario de las 21:00.");
