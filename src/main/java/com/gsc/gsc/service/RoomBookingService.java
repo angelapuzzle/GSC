@@ -47,6 +47,23 @@ public class RoomBookingService {
     }
 
     // =========================================================================
+    // READ: BUSCAR RESERVA POR ID (RECIBE DTO CON ID -> DEVUELVE DTO COMPLETO)
+    // =========================================================================
+
+    @Transactional(readOnly = true)
+    public RoomBookingDto buscarReserva(RoomBookingDto dto) {
+        if (dto == null || !existeReserva(dto.getIdReserva())) {
+            Long idBuscado = (dto != null) ? dto.getIdReserva() : null;
+            throw new IllegalArgumentException("No existe ninguna reserva registrada con el ID: " + idBuscado);
+        }
+
+        ReservaSala reservaEncontrada = roomBookingRepository.findById(dto.getIdReserva())
+                .orElseThrow(() -> new IllegalArgumentException("No existe ninguna reserva registrada con el ID: " + dto.getIdReserva()));
+
+        return convertirEntidadADto(reservaEncontrada);
+    }
+
+    // =========================================================================
     // UPDATE: SOLO FUNCIONA SI EXISTE LA RESERVA
     // =========================================================================
 
@@ -73,6 +90,7 @@ public class RoomBookingService {
 
         roomBookingRepository.deleteById(idReserva);
     }
+
 
     // =========================================================================
     // 1. VALIDACIÓN INTEGRAL DEL DTO
@@ -139,6 +157,35 @@ public class RoomBookingService {
         reserva.setSerialesInvitados(invitados);
 
         return reserva;
+    }
+
+    // =========================================================================
+    // 3. CONVERSIÓN INVERSA (ENTIDAD -> DTO)
+    // =========================================================================
+
+    public RoomBookingDto convertirEntidadADto(ReservaSala reserva) {
+        RoomBookingDto dto = new RoomBookingDto();
+        dto.setIdReserva(reserva.getIdReserva());
+
+        if (reserva.getSala() != null) {
+            dto.setIdSala(reserva.getSala().getIdSala());
+        }
+        if (reserva.getUsuario() != null) {
+            dto.setSerialIdentidad(reserva.getUsuario().getSerialIdentidad());
+        }
+
+        dto.setFecha(reserva.getFecha());
+        dto.setHoraInicio(reserva.getHoraInicio());
+        dto.setHoraFin(reserva.getHoraFin());
+        dto.setComentarios(reserva.getComentarios());
+
+        if (reserva.getSerialesInvitados() != null && !reserva.getSerialesInvitados().isEmpty()) {
+            dto.setSerialesInvitados(String.join(", ", reserva.getSerialesInvitados()));
+        } else {
+            dto.setSerialesInvitados("");
+        }
+
+        return dto;
     }
 
     // =========================================================================
