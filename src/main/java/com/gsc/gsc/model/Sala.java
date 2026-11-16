@@ -14,6 +14,7 @@ public class Sala {
     @Column(name = "id_sala")
     private String idSala;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private DisponibilidadSala disponibilidad;
 

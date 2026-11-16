@@ -1,8 +1,5 @@
 package com.gsc.gsc.model;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import jakarta.persistence.*;
 
 import com.gsc.gsc.model.enums.CargoUsuario;
@@ -34,7 +31,6 @@ public class Usuario {
     // Todas estas anotaciones son necesarias para que Hibernate pueda mapear
     // correctamente el enum Cargo a un tipo de dato ENUM en PostgreSQL.
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "cargo", nullable = false)
     private CargoUsuario cargo;
 
