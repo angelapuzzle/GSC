@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 public class RoomBookingDto {
 
+    private Long idReserva;
     private String idSala;
     private String serialIdentidad;
 
@@ -23,6 +24,14 @@ public class RoomBookingDto {
     private String comentarios;
 
     public RoomBookingDto() {
+    }
+
+    public Long getIdReserva() {
+        return idReserva;
+    }
+
+    public void setIdReserva(Long idReserva) {
+        this.idReserva = idReserva;
     }
 
     public String getIdSala() {
