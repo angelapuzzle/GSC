@@ -3,8 +3,8 @@ import org.springframework.stereotype.Service;
 import com.gsc.gsc.model.Usuario;
 import com.gsc.gsc.repository.UsuarioRepository;
 
-import com.gsc.gsc.dto.UserCreateRequestDTO;
-import com.gsc.gsc.dto.UserPatchRequestDTO;
+import com.gsc.gsc.dto.UserDtos.UserCreateRequestDto;
+import com.gsc.gsc.dto.UserDtos.UserPatchRequestDto;
 import com.gsc.gsc.exception.InvalidUserStateException;
 import com.gsc.gsc.exception.ResourceAlreadyExistsException;
 import com.gsc.gsc.exception.ResourceNotFoundException;
@@ -36,39 +36,39 @@ public class UsuarioService {
         validarUsuarioActivo(usuario);
     }
 
-    public Usuario crearUsuario(UserCreateRequestDTO dto) {
+    public Usuario crearUsuario(UserCreateRequestDto dto) {
 
-        if (usuarioRepository.existsById(dto.getSerialIdentidad())) {
-            throw new ResourceAlreadyExistsException("El usuario con serialIdentidad " + dto.getSerialIdentidad() + " ya existe.");
+        if (usuarioRepository.existsById(dto.serialIdentidad())) {
+            throw new ResourceAlreadyExistsException("El usuario con serialIdentidad " + dto.serialIdentidad() + " ya existe.");
         }
 
         Usuario usuario = new Usuario();
 
-        usuario.setSerialIdentidad(dto.getSerialIdentidad());
-        usuario.setNombre(dto.getNombre());
-        usuario.setApellido(dto.getApellido());
-        usuario.setActivo(dto.getActivo());
-        usuario.setCargo(dto.getCargo());
+        usuario.setSerialIdentidad(dto.serialIdentidad());
+        usuario.setNombre(dto.nombre());
+        usuario.setApellido(dto.apellido());
+        usuario.setActivo(dto.activo());
+        usuario.setCargo(dto.cargo());
 
         return usuarioRepository.save(usuario);
     }
 
-    public Usuario actualizarUsuario(UserPatchRequestDTO dto) {
-        String serialIdentidad = dto.getSerialIdentidad();
+    public Usuario actualizarUsuario(UserPatchRequestDto dto) {
+        String serialIdentidad = dto.serialIdentidad();
         Usuario usuarioExistente = usuarioRepository.findById(serialIdentidad)
                 .orElseThrow(() -> new ResourceNotFoundException("El usuario con serialIdentidad " + serialIdentidad + " no existe."));
 
-        if (dto.getNombre() != null) {
-            usuarioExistente.setNombre(dto.getNombre());
+        if (dto.nombre() != null) {
+            usuarioExistente.setNombre(dto.nombre());
         }
-        if (dto.getApellido() != null) {
-            usuarioExistente.setApellido(dto.getApellido());
+        if (dto.apellido() != null) {
+            usuarioExistente.setApellido(dto.apellido());
         }
-        if (dto.getActivo() != null) {
-            usuarioExistente.setActivo(dto.getActivo());
+        if (dto.activo() != null) {
+            usuarioExistente.setActivo(dto.activo());
         }
-        if (dto.getCargo() != null) {
-            usuarioExistente.setCargo(dto.getCargo());
+        if (dto.cargo() != null) {
+            usuarioExistente.setCargo(dto.cargo());
         }
 
         // 3. Guardamos los cambios

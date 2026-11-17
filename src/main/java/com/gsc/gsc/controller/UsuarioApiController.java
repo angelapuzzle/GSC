@@ -4,10 +4,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.gsc.gsc.dto.ApiResponseDTO;
-import com.gsc.gsc.dto.UserCreateRequestDTO;
-import com.gsc.gsc.dto.UserPatchRequestDTO;
-import com.gsc.gsc.dto.UserResponseDTO;
+import com.gsc.gsc.dto.ApiResponseDto;
+import com.gsc.gsc.dto.UserDtos.UserCreateRequestDto;
+import com.gsc.gsc.dto.UserDtos.UserPatchRequestDto;
+import com.gsc.gsc.dto.UserDtos.UserResponseDto;
 import com.gsc.gsc.model.Usuario;
 import com.gsc.gsc.service.UsuarioService;
 
@@ -35,17 +35,17 @@ public class UsuarioApiController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponseDTO> obtenerUsuario(@PathVariable("id") String serialIdentidad) {
+    public ResponseEntity<UserResponseDto> obtenerUsuario(@PathVariable("id") String serialIdentidad) {
         Usuario usuario = usuarioService.obtenerUsuario(serialIdentidad);
-        UserResponseDTO responseDTO = new UserResponseDTO(usuario);
+        UserResponseDto responseDTO = UserResponseDto.fromUsuario(usuario);
         return ResponseEntity.ok(responseDTO);
     }
     
 
     @PostMapping
-    public ResponseEntity<ApiResponseDTO> crearUsuario(@Valid @RequestBody UserCreateRequestDTO dto) {
+    public ResponseEntity<ApiResponseDto> crearUsuario(@Valid @RequestBody UserCreateRequestDto dto) {
         Usuario usuarioCreado = usuarioService.crearUsuario(dto);
-        ApiResponseDTO response = new ApiResponseDTO(true, "Usuario creado exitosamente.");
+        ApiResponseDto response = new ApiResponseDto(true, "Usuario creado exitosamente.");
 
         URI location = ServletUriComponentsBuilder
                         .fromCurrentRequest()
@@ -57,16 +57,16 @@ public class UsuarioApiController {
     }
     
     @PatchMapping
-    public ResponseEntity<UserResponseDTO> actualizarUsuario(@Valid @RequestBody UserPatchRequestDTO dto) {
+    public ResponseEntity<UserResponseDto> actualizarUsuario(@Valid @RequestBody UserPatchRequestDto dto) {
         Usuario usuario = usuarioService.actualizarUsuario(dto);
-        UserResponseDTO response = new UserResponseDTO(usuario);
+        UserResponseDto response = UserResponseDto.fromUsuario(usuario);
         return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponseDTO> eliminarUsuario(@PathVariable("id") String serialIdentidad) {
+    public ResponseEntity<ApiResponseDto> eliminarUsuario(@PathVariable("id") String serialIdentidad) {
         usuarioService.eliminarUsuario(serialIdentidad);
-        ApiResponseDTO response = new ApiResponseDTO(true, "Usuario eliminado exitosamente.");
+        ApiResponseDto response = new ApiResponseDto(true, "Usuario eliminado exitosamente.");
         return ResponseEntity.ok(response);
     }
 }

@@ -10,26 +10,26 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.gsc.gsc.dto.ApiResponseDTO;
+import com.gsc.gsc.dto.ApiResponseDto;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponseDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ApiResponseDTO response = new ApiResponseDTO(false, ex.getMessage());
+    public ResponseEntity<ApiResponseDto> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ApiResponseDto response = new ApiResponseDto(false, ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @ExceptionHandler(InvalidUserStateException.class)
-    public ResponseEntity<ApiResponseDTO> handleInvalidUserStateException(InvalidUserStateException ex) {
-        ApiResponseDTO response = new ApiResponseDTO(false, ex.getMessage());
+    public ResponseEntity<ApiResponseDto> handleInvalidUserStateException(InvalidUserStateException ex) {
+        ApiResponseDto response = new ApiResponseDto(false, ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ApiResponseDTO> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
-        ApiResponseDTO response = new ApiResponseDTO(false, ex.getMessage());
+    public ResponseEntity<ApiResponseDto> handleResourceAlreadyExistsException(ResourceAlreadyExistsException ex) {
+        ApiResponseDto response = new ApiResponseDto(false, ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }
 
