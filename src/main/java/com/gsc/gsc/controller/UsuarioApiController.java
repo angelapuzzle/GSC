@@ -16,6 +16,7 @@ import jakarta.validation.Valid;
 import java.net.URI;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,7 @@ public class UsuarioApiController {
         this.usuarioService = usuarioService;
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MONITOR') or hasRole('USER')")
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> obtenerUsuario(@PathVariable("id") String serialIdentidad) {
         Usuario usuario = usuarioService.obtenerUsuario(serialIdentidad);
@@ -41,7 +43,7 @@ public class UsuarioApiController {
         return ResponseEntity.ok(responseDTO);
     }
     
-
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MONITOR')")
     @PostMapping
     public ResponseEntity<ApiResponseDto> crearUsuario(@Valid @RequestBody UserCreateRequestDto dto) {
         Usuario usuarioCreado = usuarioService.crearUsuario(dto);
@@ -56,6 +58,7 @@ public class UsuarioApiController {
         return ResponseEntity.created(location).body(response);
     }
     
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MONITOR')")
     @PatchMapping
     public ResponseEntity<UserResponseDto> actualizarUsuario(@Valid @RequestBody UserPatchRequestDto dto) {
         Usuario usuario = usuarioService.actualizarUsuario(dto);
@@ -63,6 +66,7 @@ public class UsuarioApiController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MONITOR')")
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponseDto> eliminarUsuario(@PathVariable("id") String serialIdentidad) {
         usuarioService.eliminarUsuario(serialIdentidad);
