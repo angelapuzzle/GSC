@@ -96,12 +96,10 @@
                     <label>¿Dónde te quieres sentar?</label>
                     <select name="equipoSeleccionado" required>
                         <option value="" disabled selected>-- Elige un puesto --</option>
-                        <th:block th:each="pc : ${todosLosEquipos}">
-                            <option th:if="${pc.disponibilidad.name() != 'MANTENIMIENTO'}" 
-                                    th:value="${pc.sala.idSala + '-' + pc.numComputador}" 
-                                    th:text="${'Sala ' + pc.sala.idSala + ' - PC ' + pc.numComputador + ' (' + pc.disponibilidad + ')'}">
-                            </option>
-                        </th:block>
+                        <option th:each="pc : ${equiposHabilitados}"
+                                th:value="${pc.sala.idSala + '-' + pc.numComputador}"
+                                th:text="${'Sala ' + pc.sala.idSala + ' - PC ' + pc.numComputador + ' (' + pc.disponibilidad + ')'}">
+                        </option>
                     </select>
                 </div>
 
