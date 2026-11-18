@@ -42,7 +42,7 @@
             font-weight: bold;
             text-transform: uppercase;
         }
-        .status-libre {
+        .status-disponible {
             background-color: #def7ec;
             color: #03543f;
         }
@@ -74,40 +74,41 @@
 
                 <div style="flex: 1; min-width: 150px; background: #def7ec; border: 1px solid #bcf0da; padding: 1.5rem; border-radius: 8px; text-align: center;">
                     <span style="font-size: 24px; font-weight: bold; color: #03543f;"
-                          th:text="${#lists.size(computadoresSala.?[estado == 'LIBRE'])}"></span>
+                          th:text="${#lists.size(computadoresSala.?[disponibilidad.name() == 'DISPONIBLE'])}"></span>
                     <p style="margin-top: 0.5rem; font-size: 11px; color: #03543f; font-weight: 600; text-transform: uppercase;">Disponibles</p>
                 </div>
 
                 <div style="flex: 1; min-width: 150px; background: #feecdc; border: 1px solid #fbd5d5; padding: 1.5rem; border-radius: 8px; text-align: center;">
                     <span style="font-size: 24px; font-weight: bold; color: #b45309;"
-                          th:text="${#lists.size(computadoresSala.?[estado == 'OCUPADO'])}"></span>
+                          th:text="${#lists.size(computadoresSala.?[disponibilidad.name() == 'OCUPADO'])}"></span>
                     <p style="margin-top: 0.5rem; font-size: 11px; color: #b45309; font-weight: 600; text-transform: uppercase;">Ocupados</p>
                 </div>
 
             </div>
 
-            <table class="monitoreo-tabla">
-                <thead>
-                    <tr>
-                        <th>Computador</th>
-                        <th>Ubicación / Puesto</th>
-                        <th>Estado del Equipo</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="pc : ${computadoresSala}">
-                        <td th:text="${pc.nombre}"></td>
-                        <td th:text="${pc.puesto}"></td>
-                        <td>
-                            <span class="status-badge" 
-                                  th:classappend="${pc.estado == 'LIBRE' ? 'status-libre' : (pc.estado == 'OCUPADO' ? 'status-ocupado' : 'status-mantenimiento')}"
-                                  th:text="${pc.estado}">
-                            
-                            </span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <div style="overflow-x: auto;">
+                <table class="monitoreo-tabla">
+                    <thead>
+                        <tr>
+                            <th>Computador</th>
+                            <th>Sala</th>
+                            <th>Estado del Equipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="pc : ${computadoresSala}">
+                            <td th:text="${'PC ' + pc.numComputador}"></td>
+                            <td th:text="${pc.sala.idSala}"></td>
+                            <td>
+                                <span class="status-badge" 
+                                      th:classappend="${pc.disponibilidad.name() == 'DISPONIBLE' ? 'status-disponible' : (pc.disponibilidad.name() == 'OCUPADO' ? 'status-ocupado' : 'status-mantenimiento')}"
+                                      th:text="${pc.disponibilidad.name()}">
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
