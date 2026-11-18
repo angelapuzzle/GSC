@@ -72,13 +72,13 @@
 </head>
 <body style="background-color: #f3f4f6;">
 
-    <div th:replace="~{fragments/header :: admin-header}"></div>
+    <div th:replace="~{fragments/header :: user-header}"></div>
 
     <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
         <div class="reg-box">
             <h2 style="color: #677d29; text-align: center; font-size: 24px;">Registro en Sala de Cómputo</h2>
             
-                        <form th:action="@{/sala/registrar}" method="post">
+            <form th:action="@{/sala/registrar}" method="post">
                 <div class="campo-grupo">
                     <label>¿Qué vas a hacer?</label>
                     <select name="tipoAccion" required>

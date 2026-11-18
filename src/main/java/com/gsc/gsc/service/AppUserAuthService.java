@@ -37,6 +37,11 @@ public class AppUserAuthService implements UserDetailsService {
                 .build();
     }
 
+    public AppUser findByUsername(String username) {
+        return appUserRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    }
+
     public boolean existsUsers() {
         return appUserRepository.count() > 0;
     }

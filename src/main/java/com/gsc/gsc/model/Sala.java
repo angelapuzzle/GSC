@@ -21,6 +21,10 @@ public class Sala {
     @OneToMany(mappedBy = "sala", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Computador> computadores = new HashSet<>();
 
+    @OneToOne
+    @JoinColumn(name = "app_user_id_responsable", referencedColumnName = "id", unique = true, nullable = false)
+    private AppUser responsable;
+
     public String getIdSala() {
         return idSala;
     }
@@ -49,6 +53,14 @@ public class Sala {
     public void removeComputador(Computador computador) {
         computadores.remove(computador);
         computador.setSala(null);
+    }
+
+    public AppUser getResponsable() {
+        return responsable;
+    }
+
+    public void setResponsable(AppUser responsable) {
+        this.responsable = responsable;
     }
 
 }

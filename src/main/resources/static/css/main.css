@@ -32,7 +32,8 @@ header .section-icon .banner-container {
     z-index: 10000;
 }
 
-.admin-header {
+.admin-header,
+.user-header {
     position: relative;
     z-index: 100;
     background: #fff;
@@ -65,13 +66,23 @@ header #divider-top {
     height: 0.5rem;
 }
 
-#admin-header-content {
+#admin-header-content,
+#user-header-content {
     background: #677d29;
     background-color: #677d29;
     min-height: 75px;
     display: flex;
     align-items: center;
+}
+
+#admin-header-content {
     justify-content: center;
+}
+
+#user-header-content {
+    justify-content: flex-start;
+    padding-left: calc(3rem + 6.25rem + 1.25rem);
+    padding-right: clamp(3rem, 2vw, 2rem);
 }
 
 #admin-header-nav {
@@ -89,6 +100,25 @@ header #divider-top {
     text-decoration: none;
     font-size: 14pt;
     color: #ffffff
+}
+
+header #user-header-content #name-aplication {
+    margin: 0;
+    text-decoration: none;
+    line-height: 24px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14pt;
+}
+
+header #user-header-content {
+    color: #ffffff;
+    padding-top: 1.75rem;
+    padding-bottom: 1.75rem;
+    display: flex;
+    align-items: center;
 }
 
 .main,main {
@@ -132,7 +162,6 @@ body,html {
 
 .h1,.h2,.h3,.h4,.h5,.h6,h1,h2,h3,h4,h5,h6 {
     margin-top: 0;
-    margin-bottom: 0;
     font-weight: 700;
     line-height: 1.2
 }

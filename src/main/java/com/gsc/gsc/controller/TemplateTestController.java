@@ -14,6 +14,6 @@ public class TemplateTestController {
         // model.addAttribute("username", "Alex");
 
         // Returns the name of the HTML file in templates/
-        return "layouts/admin-layout"; 
+        return "fragments/header"; 
     }
 }

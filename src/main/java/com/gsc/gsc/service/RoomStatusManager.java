@@ -1,6 +1,7 @@
 package com.gsc.gsc.service;
 
 import com.gsc.gsc.dto.AsignacionPcDTO;
+import com.gsc.gsc.model.AppUser;
 import com.gsc.gsc.model.Computador;
 import com.gsc.gsc.model.ComputadorId;
 import com.gsc.gsc.model.ReservaComputador;
@@ -11,7 +12,6 @@ import com.gsc.gsc.repository.ComputadorRepository;
 import com.gsc.gsc.repository.ReservaComputadorRepository;
 import com.gsc.gsc.repository.SalaRepository;
 import com.gsc.gsc.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,20 +20,24 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
+
 @Service
 public class RoomStatusManager {
 
-    @Autowired
-    private ComputadorRepository computadorRepository;
+    private final ComputadorRepository computadorRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private ReservaComputadorRepository reservaComputadorRepository;
+    private final ReservaComputadorRepository reservaComputadorRepository;
 
-    @Autowired
-    private SalaRepository salaRepository;
+    private final SalaRepository salaRepository;
+
+    RoomStatusManager(ComputadorRepository computadorRepository, UsuarioRepository usuarioRepository, ReservaComputadorRepository reservaComputadorRepository, SalaRepository salaRepository) {
+        this.computadorRepository = computadorRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.reservaComputadorRepository = reservaComputadorRepository;
+        this.salaRepository = salaRepository;
+    }
 
     public List<Sala> obtenerTodasLasSalas() {
         return salaRepository.findAll();
@@ -49,15 +53,11 @@ public class RoomStatusManager {
         );
     }
 
-    private String extraerIdSala(String username) {
-        if (username != null && username.toLowerCase().startsWith("sala") && username.length() > 4) {
-            return username.substring(4);
-        }
-        return "";
-    }
+    public List<Computador> obtenerEquiposDeSalaActual(AppUser user) {
+        String idSala = salaRepository.findByResponsable(user)
+                .map(Sala::getIdSala)
+                .orElse("");
 
-    public List<Computador> obtenerEquiposDeSalaActual(String username) {
-        String idSala = extraerIdSala(username);
         if (idSala.isEmpty()) {
             return obtenerEquiposSinMantenimiento();
         }

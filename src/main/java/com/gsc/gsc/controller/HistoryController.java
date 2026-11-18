@@ -30,6 +30,7 @@ public class HistoryController {
     public String verHistorial(
             @RequestParam(required = false) String documento,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha,
+            @RequestParam(required = false) String sala,
             @RequestParam(required = false) Integer puesto,
             Model model) {
 
@@ -48,9 +49,16 @@ public class HistoryController {
                         .collect(Collectors.toList());
             }
 
-            if (fecha != null) {
+            if (fecha != null && !fecha.toString().isBlank()) {
                 historial = historial.stream()
                         .filter(reg -> fecha.equals(reg.getFecha()))
+                        .collect(Collectors.toList());
+            }
+
+            if (sala != null && !sala.isBlank()) {
+                historial = historial.stream()
+                        .filter(reg -> reg.getComputador().getSala() != null &&
+                                reg.getComputador().getSala().getIdSala().contains(sala))
                         .collect(Collectors.toList());
             }
 

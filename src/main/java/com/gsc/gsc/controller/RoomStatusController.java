@@ -1,10 +1,11 @@
 package com.gsc.gsc.controller;
 
 import com.gsc.gsc.dto.AsignacionPcDTO;
+import com.gsc.gsc.model.AppUser;
 import com.gsc.gsc.model.Computador;
 import com.gsc.gsc.model.enums.DisponibilidadComputador;
+import com.gsc.gsc.service.AppUserAuthService;
 import com.gsc.gsc.service.RoomStatusManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,28 +15,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
+
 import java.util.List;
 
 @Controller
 @RequestMapping("/sala")
 public class RoomStatusController {
 
-    @Autowired
-    private RoomStatusManager roomStatusManager;
+    private final RoomStatusManager roomStatusManager;
+
+    private final AppUserAuthService appUserAuthService;
+
+    RoomStatusController(RoomStatusManager roomStatusManager, AppUserAuthService appUserAuthService) {
+        this.roomStatusManager = roomStatusManager;
+        this.appUserAuthService = appUserAuthService;
+    }
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model, Principal principal) {
-        String username = principal.getName();
-        model.addAttribute("equiposHabilitados", roomStatusManager.obtenerEquiposDeSalaActual(username));
+        AppUser user = appUserAuthService.findByUsername(principal.getName());
+        model.addAttribute("equiposHabilitados", roomStatusManager.obtenerEquiposDeSalaActual(user));
         return "views/UserRegistrationGUI";
     }
 
     @PostMapping("/registrar")
     public String procesarRegistro(@ModelAttribute AsignacionPcDTO dto, Model model, Principal principal) {
-        String username = principal.getName();
+        AppUser user = appUserAuthService.findByUsername(principal.getName());
         String resultado = roomStatusManager.procesarIngresoOSalida(dto);
         model.addAttribute("resultado", resultado);
-        model.addAttribute("equiposHabilitados", roomStatusManager.obtenerEquiposDeSalaActual(username));
+        model.addAttribute("equiposHabilitados", roomStatusManager.obtenerEquiposDeSalaActual(user));
         return "views/UserRegistrationGUI";
     }
 

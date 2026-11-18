@@ -55,8 +55,12 @@ public class DataInitializer implements CommandLineRunner {
     @Override
     @Transactional
     public void run(String... args) {
+        createAppUsers();
+        createSalas();
         createDummyData();
-        
+    }
+
+    private void createAppUsers() {
         if (appUserAuthService.existsUsers()) {
             log.info("La base de datos ya contiene usuarios. Omitiendo inicialización.");
             return;
@@ -66,8 +70,7 @@ public class DataInitializer implements CommandLineRunner {
 
         createdUser = appUserAuthService.registrarUsuario("admin", "admin123", "ADMIN");
         log.info("Usuario administrador inicial '{}' creado correctamente.", createdUser.getUsername());
-        createdUser = appUserAuthService.registrarUsuario("user", "user123", "USER");
-        log.info("Usuario creado correctamente: '{}'", createdUser.getUsername());
+
         createdUser = appUserAuthService.registrarUsuario("monitor1", "monitor1123", "MONITOR");
         log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
         createdUser = appUserAuthService.registrarUsuario("monitor2", "monitor2123", "MONITOR");
@@ -76,12 +79,32 @@ public class DataInitializer implements CommandLineRunner {
         log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
         createdUser = appUserAuthService.registrarUsuario("monitor4", "monitor4123", "MONITOR");
         log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
+    }
 
-        
+    private void createSalas() {
+        if (salaRepository.count() > 0) {
+            return;
+        }
+
+        List<AppUser> responsables = new ArrayList<>();
+        responsables.add(appUserAuthService.registrarUsuario("sala1", "sala1123", "USER"));
+        responsables.add(appUserAuthService.registrarUsuario("sala2", "sala2123", "USER"));
+        responsables.add(appUserAuthService.registrarUsuario("sala3", "sala3123", "USER"));
+        responsables.add(appUserAuthService.registrarUsuario("sala4", "sala4123", "USER"));
+
+        List<Sala> salas = new ArrayList<>();
+        for (int i = 1; i <= 4; i++) {
+            Sala sala = new Sala();
+            sala.setIdSala("SALA-" + i);
+            sala.setDisponibilidad(com.gsc.gsc.model.enums.DisponibilidadSala.values()[0]);
+            sala.setResponsable(responsables.get(i - 1));
+            salas.add(sala);
+        }
+        salaRepository.saveAll(salas);
     }
 
     private void createDummyData() {
-        if (usuarioRepository.count() > 0 && salaRepository.count() > 0) {
+        if (usuarioRepository.count() > 0) {
             return;
         }
 
@@ -100,11 +123,15 @@ public class DataInitializer implements CommandLineRunner {
         }
         usuarios = usuarioRepository.saveAll(usuarios);
 
-        List<Sala> salas = new ArrayList<>();
+        Sala[] salas = {
+            salaRepository.findById("SALA-1").orElseThrow(),
+            salaRepository.findById("SALA-2").orElseThrow(),
+            salaRepository.findById("SALA-3").orElseThrow(),
+            salaRepository.findById("SALA-4").orElseThrow()
+        };
+
         for (int i = 1; i <= 4; i++) {
-            Sala sala = new Sala();
-            sala.setIdSala("SALA-" + i);
-            sala.setDisponibilidad(com.gsc.gsc.model.enums.DisponibilidadSala.values()[0]);
+            Sala sala = salas[i - 1];
 
             for (int num = 1; num <= 10; num++) {
                 Computador computador = new Computador();
@@ -112,9 +139,7 @@ public class DataInitializer implements CommandLineRunner {
                 computador.setDisponibilidad(com.gsc.gsc.model.enums.DisponibilidadComputador.values()[0]);
                 sala.addComputador(computador);
             }
-            salas.add(sala);
         }
-        salas = salaRepository.saveAll(salas);
 
         List<Computador> computadores = computadorRepository.findAll();
 
@@ -142,14 +167,14 @@ public class DataInitializer implements CommandLineRunner {
             setField(reserva, "horaFin", LocalTime.of(8 + (i % 9), 30));
             setField(reserva, "comentarios", "Reserva de sala de prueba " + (i + 1));
             setField(reserva, "usuario", usuarios.get(i % usuarios.size()));
-            setField(reserva, "sala", salas.get(i % salas.size()));
+            setField(reserva, "sala", salas[i % salas.length]);
             setField(reserva, "serialesInvitados", new HashSet<String>());
             reservasSala.add(reserva);
         }
         reservaSalaRepository.saveAll(reservasSala);
 
-        log.info("Datos de prueba creados: {} usuarios, {} salas, {} computadores, {} reservas de computador y {} reservas de sala.",
-                usuarios.size(), salas.size(), computadores.size(), reservasComputador.size(), reservasSala.size());
+        log.info("Datos de prueba creados: {} usuarios, {} computadores, {} reservas de computador y {} reservas de sala.",
+                usuarios.size(), computadores.size(), reservasComputador.size(), reservasSala.size());
     }
 
     private void setField(Object target, String fieldName, Object value) {
