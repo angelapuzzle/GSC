@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments/head :: head('Reserva de Salas - GSC')}"></head>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f9;
+    }
+
+    .form-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 30px 15px;
+    }
+
+    .top-actions-bar {
+        width: 100%;
+        max-width: 536px;
+        display: flex;
+        justify-content: flex-end;
+        margin-bottom: 14px;
+    }
+
+    .booking-card {
+        background: #ffffff;
+        padding: 28px;
+        border-radius: 6px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-top: 4px solid #681827;
+    }
+
+    .booking-card h2 {
+        margin-top: 0;
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 20px;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-group label {
+        display: block;
+        font-size: 13px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        color: #444;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 8px 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: inherit;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #681827;
+    }
+
+    .form-group input[readonly] {
+        background-color: #e9ecef;
+        color: #495057;
+        cursor: not-allowed;
+        font-weight: bold;
+    }
+
+    .form-row {
+        display: flex;
+        gap: 12px;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    .search-actions-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 8px;
+    }
+
+    .search-actions-row .btn-submit {
+        margin-top: 0;
+        flex: 1;
+    }
+
+    .btn-preview {
+        flex: 1;
+        background-color: #ffffff;
+        color: #681827;
+        border: 1px solid #681827;
+        padding: 10px 12px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-preview:hover {
+        background-color: #f9f2f4;
+    }
+
+    .alert-success {
+        background-color: #e6f4ea;
+        color: #137333;
+        padding: 10px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        margin-bottom: 15px;
+        border: 1px solid #ceead6;
+    }
+
+    .alert-error {
+        background-color: #fce8e6;
+        color: #d93025;
+        padding: 10px 12px;
+        border-radius: 4px;
+        font-size: 13px;
+        margin-bottom: 15px;
+        border: 1px solid #fad2cf;
+    }
+
+    .btn-submit {
+        width: 100%;
+        background-color: #681827;
+        color: #ffffff;
+        border: none;
+        padding: 10px 16px;
+        font-size: 15px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 8px;
+    }
+
+    .btn-submit:hover {
+        background-color: #50121e;
+    }
+
+    .btn-delete {
+        width: 100%;
+        background-color: #ffffff;
+        color: #c5221f;
+        border: 1px solid #c5221f;
+        padding: 10px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .btn-delete:hover {
+        background-color: #c5221f;
+        color: #ffffff;
+    }
+
+    .btn-open-manage {
+        background-color: #ffffff;
+        color: #681827;
+        border: 1px solid #681827;
+        padding: 9px 16px;
+        font-size: 14px;
+        font-weight: bold;
+        border-radius: 4px;
+        cursor: pointer;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-open-manage:hover {
+        background-color: #681827;
+        color: #ffffff;
+    }
+
+    /* Estilos del Modal */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px 15px;
+        overflow-y: auto;
+    }
+
+    .modal-overlay.active {
+        display: flex;
+    }
+
+    .modal-card {
+        background: #ffffff;
+        padding: 28px;
+        border-radius: 6px;
+        width: 100%;
+        max-width: 480px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        border-top: 4px solid #681827;
+        position: relative;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 10px;
+        margin-bottom: 18px;
+    }
+
+    .modal-header h2 {
+        margin: 0;
+        color: #333;
+        font-size: 20px;
+    }
+
+    .modal-close {
+        background: none;
+        border: none;
+        font-size: 22px;
+        font-weight: bold;
+        color: #666;
+        cursor: pointer;
+        line-height: 1;
+    }
+
+    .modal-close:hover {
+        color: #681827;
+    }
+
+    .manage-form-section {
+        display: none;
+        margin-top: 20px;
+        padding-top: 18px;
+        border-top: 1px dashed #ccc;
+    }
+
+    .manage-form-section.visible {
+        display: block;
+    }
+</style>
+
+<body>
+
+    <header th:replace="~{fragments/header :: admin-header}"></header>
+
+    <div class="form-wrapper">
+
+        <!-- Botón externo para abrir el modal de Consulta / Edición / Borrado -->
+        <div class="top-actions-bar">
+            <button type="button" class="btn-open-manage" onclick="abrirModalGestion()">
+                Gestionar Reserva por ID
+            </button>
+        </div>
+
+        <!-- Tarjeta exclusiva de creación (CREATE) -->
+        <div class="booking-card">
+            <h2>Registrar Reserva de Sala</h2>
+
+            <div th:if="${mensajeExito}" th:text="${mensajeExito}" class="alert-success"></div>
+            <div th:if="${mensajeError}" th:text="${mensajeError}" class="alert-error"></div>
+
+            <form th:action="@{/reservas_salas}" th:object="${reservaDto}" method="post">
+
+                <div class="form-group">
+                    <label for="idSala">ID de la Sala:</label>
+                    <input type="text" id="idSala" th:field="*{idSala}" placeholder="Ej. SALA-01" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="serialIdentidad">Serial de Identidad (Solicitante):</label>
+                    <input type="text" id="serialIdentidad" th:field="*{serialIdentidad}" placeholder="Ej. 1020304050" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="fecha">Fecha de la Reserva:</label>
+                    <input type="date" id="fecha" th:field="*{fecha}" required />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="horaInicio">Hora de Inicio:</label>
+                        <input type="time" id="horaInicio" th:field="*{horaInicio}" min="07:00" max="20:00" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="horaFin">Hora de Finalización:</label>
+                        <input type="time" id="horaFin" th:field="*{horaFin}" min="07:00" max="20:00" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="serialesInvitados">Seriales de Invitados (opcional, separados por coma):</label>
+                    <input type="text" id="serialesInvitados" th:field="*{serialesInvitados}" placeholder="Ej. 1001, 1002, 1003" />
+                </div>
+
+                <div class="form-group">
+                    <label for="comentarios">Comentarios / Motivo:</label>
+                    <textarea id="comentarios" th:field="*{comentarios}" rows="3" placeholder="Ej. Clase de Redes de Computadores"></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Guardar Reserva</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ===================================================================== -->
+    <!-- MODAL UNIFICADO: READ + UPDATE + DELETE                               -->
+    <!-- ===================================================================== -->
+    <div id="modal-manage-reserva" class="modal-overlay" onclick="cerrarSiClicFuera(event)">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h2>Gestionar Reserva</h2>
+                <button type="button" class="modal-close" onclick="cerrarModalGestion()">&times;</button>
+            </div>
+
+            <div id="manage-alert-error" class="alert-error" style="display: none;"></div>
+
+            <!-- Paso 1 (READ): Buscar por ID -->
+            <div class="form-group">
+                <label for="search-idReserva">Buscar por ID de la Reserva:</label>
+                <input type="number" id="search-idReserva" placeholder="Ej. 1" min="1" />
+            </div>
+
+            <div class="search-actions-row">
+                <button type="button" class="btn-submit" onclick="buscarReservaParaGestion()">
+                    Buscar Reserva
+                </button>
+                <button type="button" class="btn-preview" onclick="previsualizarGuiGestion()">
+                    Ver GUI
+                </button>
+            </div>
+
+            <!-- Paso 2 (UPDATE y DELETE): Formulario completo con ID incluido -->
+            <div id="manage-form-section" class="manage-form-section">
+
+                <form id="form-update-reserva" th:action="@{/reservas_salas/editar}" method="post">
+
+                    <!-- Campo ID de la reserva para que viaje dentro del RoomBookingDto -->
+                    <div class="form-group">
+                        <label for="edit-idReserva">ID de la Reserva:</label>
+                        <input type="number" id="edit-idReserva" name="idReserva" readonly required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-idSala">ID de la Sala:</label>
+                        <input type="text" id="edit-idSala" name="idSala" placeholder="Ej. SALA-01" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-serialIdentidad">Serial de Identidad (Solicitante):</label>
+                        <input type="text" id="edit-serialIdentidad" name="serialIdentidad" placeholder="Ej. 1020304050" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-fecha">Fecha de la Reserva:</label>
+                        <input type="date" id="edit-fecha" name="fecha" required />
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="edit-horaInicio">Hora de Inicio:</label>
+                            <input type="time" id="edit-horaInicio" name="horaInicio" min="07:00" max="20:00" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="edit-horaFin">Hora de Finalización:</label>
+                            <input type="time" id="edit-horaFin" name="horaFin" min="07:00" max="20:00" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-serialesInvitados">Seriales de Invitados (opcional, separados por coma):</label>
+                        <input type="text" id="edit-serialesInvitados" name="serialesInvitados" placeholder="Ej. 1001, 1002, 1003" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="edit-comentarios">Comentarios / Motivo:</label>
+                        <textarea id="edit-comentarios" name="comentarios" rows="3" placeholder="Ej. Clase de Redes de Computadores"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Actualizar Cambios</button>
+                </form>
+
+                <!-- Formulario independiente para DELETE -->
+                <form id="form-delete-reserva" th:action="@{/reservas_salas/eliminar}" method="post" onsubmit="return confirmarBorrado()">
+                    <input type="hidden" id="delete-idReserva" name="idReserva" />
+                    <button type="submit" class="btn-delete">Borrar Reserva</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function abrirModalGestion() {
+            document.getElementById('search-idReserva').value = '';
+            document.getElementById('manage-alert-error').style.display = 'none';
+            document.getElementById('manage-form-section').classList.remove('visible');
+            document.getElementById('modal-manage-reserva').classList.add('active');
+        }
+
+        function cerrarModalGestion() {
+            document.getElementById('modal-manage-reserva').classList.remove('active');
+        }
+
+        function cerrarSiClicFuera(event) {
+            if (event.target.id === 'modal-manage-reserva') {
+                cerrarModalGestion();
+            }
+        }
+
+        function previsualizarGuiGestion() {
+            const idEjemplo = document.getElementById('search-idReserva').value.trim() || '1';
+            document.getElementById('manage-alert-error').style.display = 'none';
+
+            document.getElementById('edit-idReserva').value = idEjemplo;
+            document.getElementById('delete-idReserva').value = idEjemplo;
+            document.getElementById('edit-idSala').value = 'SALA-01';
+            document.getElementById('edit-serialIdentidad').value = '1020304050';
+            document.getElementById('edit-fecha').value = '2026-11-16';
+            document.getElementById('edit-horaInicio').value = '09:00';
+            document.getElementById('edit-horaFin').value = '11:00';
+            document.getElementById('edit-serialesInvitados').value = '1001, 1002';
+            document.getElementById('edit-comentarios').value = 'Vista previa de edición';
+
+            document.getElementById('manage-form-section').classList.add('visible');
+        }
+
+        async function buscarReservaParaGestion() {
+            const idInput = document.getElementById('search-idReserva').value.trim();
+            const errorBox = document.getElementById('manage-alert-error');
+            const formSection = document.getElementById('manage-form-section');
+
+            errorBox.style.display = 'none';
+            formSection.classList.remove('visible');
+
+            if (!idInput) {
+                errorBox.innerText = 'Debe ingresar un ID de reserva válido.';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/reservas_salas/buscar/${encodeURIComponent(idInput)}`);
+
+                if (!response.ok) {
+                    const mensajeError = await response.text();
+                    errorBox.innerText = mensajeError || 'No se encontró ninguna reserva con ese ID.';
+                    errorBox.style.display = 'block';
+                    return;
+                }
+
+                const dto = await response.json();
+
+                document.getElementById('edit-idReserva').value = dto.idReserva || idInput;
+                document.getElementById('delete-idReserva').value = dto.idReserva || idInput;
+
+                document.getElementById('edit-idSala').value = dto.idSala || '';
+                document.getElementById('edit-serialIdentidad').value = dto.serialIdentidad || '';
+                document.getElementById('edit-fecha').value = dto.fecha || '';
+                document.getElementById('edit-horaInicio').value = dto.horaInicio || '';
+                document.getElementById('edit-horaFin').value = dto.horaFin || '';
+                document.getElementById('edit-serialesInvitados').value = dto.serialesInvitados || '';
+                document.getElementById('edit-comentarios').value = dto.comentarios || '';
+
+                formSection.classList.add('visible');
+            } catch (error) {
+                errorBox.innerText = 'Error de conexión al consultar la reserva.';
+                errorBox.style.display = 'block';
+            }
+        }
+
+        function confirmarBorrado() {
+            const id = document.getElementById('delete-idReserva').value;
+            return confirm(`¿Está seguro de que desea eliminar permanentemente la reserva #${id}?`);
+        }
+    </script>
+
+</body>
+</html>
