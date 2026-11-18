@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.gsc.gsc.model.ReservaComputador;
 import com.gsc.gsc.repository.ReservaComputadorRepository;
@@ -12,8 +11,11 @@ import com.gsc.gsc.repository.ReservaComputadorRepository;
 @Service
 public class HistoryRegistryService {
 
-    @Autowired
-    private ReservaComputadorRepository reservaComputadorRepository;
+    private final ReservaComputadorRepository reservaComputadorRepository;
+
+    HistoryRegistryService(ReservaComputadorRepository reservaComputadorRepository) {
+        this.reservaComputadorRepository = reservaComputadorRepository;
+    }
 
     public List<ReservaComputador> obtenerHistorial(LocalDate fecha) {
         List<ReservaComputador> reservas = reservaComputadorRepository.findAll();

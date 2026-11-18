@@ -155,7 +155,7 @@
             </span>
         </div>
 
-        <form class="filtros-form" th:action="@{/template_test/historial}" method="get">
+        <form class="filtros-form" th:action="@{/historial}" method="get">
             <div class="campo-filtro">
                 <label for="documento">Documento / Usuario:</label>
                 <input type="text" id="documento" name="documento" th:value="${param.documento}" placeholder="Buscar por documento o nombre...">
@@ -170,7 +170,7 @@
             </div>
             <div style="display: flex; gap: 8px;">
                 <button type="submit" class="btn-unal">Filtrar</button>
-                <a th:href="@{/template_test/historial}" class="btn-limpiar">Limpiar</a>
+                <a th:href="@{/historial}" class="btn-limpiar">Limpiar</a>
             </div>
         </form>
 
@@ -198,7 +198,7 @@
                         <td th:text="${reg.usuario.nombreCompleto}">Juan Pérez</td>
                         <td th:text="${reg.usuario.cargo}">ESTUDIANTE</td>
                         <td th:text="${reg.computador.sala.idSala}">SALA-1</td>
-                        <td><strong th:text="'PC-' + ${reg.computador.numComputador}">PC-4</strong></td>
+                        <td th:text="'PC-' + ${reg.computador.numComputador}">PC-4</td>
                         <td th:text="${reg.fecha}">2026-11-16</td>
                         <td th:text="${reg.horaInicio}">08:15:00</td>
                         <td th:text="${reg.horaFin != null ? reg.horaFin : '--:--'}">10:00:0
