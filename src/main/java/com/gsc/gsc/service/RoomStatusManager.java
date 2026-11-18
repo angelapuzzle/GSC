@@ -77,13 +77,13 @@ public class RoomStatusManager {
     public String procesarIngresoOSalida(AsignacionPcDto dto) {
         boolean esSalida = "SALIDA".equals(dto.getTipoAccion());
 
-        if (dto.getEquipoSeleccionado() == null || !dto.getEquipoSeleccionado().contains("-")) {
+        if (dto.getEquipoSeleccionado() == null || !dto.getEquipoSeleccionado().contains("::SEP::")) {
             return esSalida ? "salida_no_registrada" : "no_admitido";
         }
 
-        int guionIndex = dto.getEquipoSeleccionado().indexOf("-");
+        int guionIndex = dto.getEquipoSeleccionado().indexOf("::SEP::");
         String idSala = dto.getEquipoSeleccionado().substring(0, guionIndex);
-        Integer numComputador = Integer.parseInt(dto.getEquipoSeleccionado().substring(guionIndex + 1));
+        Integer numComputador = Integer.parseInt(dto.getEquipoSeleccionado().substring(guionIndex + 7));
 
         Optional<Usuario> usuarioOpt = usuarioRepository.findById(dto.getDocumento());
         Optional<Computador> pcOpt = computadorRepository.findById(new ComputadorId(idSala, numComputador));

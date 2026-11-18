@@ -97,7 +97,7 @@
                     <select name="equipoSeleccionado" required>
                         <option value="" disabled selected>-- Elige un puesto --</option>
                         <option th:each="pc : ${equiposHabilitados}"
-                                th:value="${pc.sala.idSala + '-' + pc.numComputador}"
+                                th:value="${pc.sala.idSala + '::SEP::' + pc.numComputador}"
                                 th:text="${'Sala ' + pc.sala.idSala + ' - PC ' + pc.numComputador + ' (' + pc.disponibilidad + ')'}">
                         </option>
                     </select>
