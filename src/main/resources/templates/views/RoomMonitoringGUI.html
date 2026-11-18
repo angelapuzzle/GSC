@@ -42,7 +42,7 @@
             font-weight: bold;
             text-transform: uppercase;
         }
-        .status-disponible {
+        .status-libre {
             background-color: #def7ec;
             color: #03543f;
         }
@@ -86,29 +86,28 @@
 
             </div>
 
-            <div style="overflow-x: auto;">
-                <table class="monitoreo-tabla">
-                    <thead>
-                        <tr>
-                            <th>Computador</th>
-                            <th>Sala</th>
-                            <th>Estado del Equipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="pc : ${computadoresSala}">
-                            <td th:text="${'PC ' + pc.numComputador}"></td>
-                            <td th:text="${pc.sala.idSala}"></td>
-                            <td>
-                                <span class="status-badge" 
-                                      th:classappend="${pc.disponibilidad.name() == 'DISPONIBLE' ? 'status-disponible' : (pc.disponibilidad.name() == 'OCUPADO' ? 'status-ocupado' : 'status-mantenimiento')}"
-                                      th:text="${pc.disponibilidad.name()}">
-                                </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <table class="monitoreo-tabla">
+                <thead>
+                    <tr>
+                        <th>Computador</th>
+                        <th>Ubicación / Puesto</th>
+                        <th>Estado del Equipo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="pc : ${computadoresSala}">
+                        <td th:text="${pc.nombre}"></td>
+                        <td th:text="${pc.puesto}"></td>
+                        <td>
+                            <span class="status-badge" 
+                                  th:classappend="${pc.estado == 'LIBRE' ? 'status-libre' : (pc.estado == 'OCUPADO' ? 'status-ocupado' : 'status-mantenimiento')}"
+                                  th:text="${pc.estado}">
+                            
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

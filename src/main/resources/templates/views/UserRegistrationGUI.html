@@ -76,7 +76,7 @@
 
     <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
         <div class="reg-box">
-            <h2 style="color: #677d29; text-align: center; font-size: 24px;">Registro en Sala de Cómputo</h2>
+            <h2 style="color: #677d29; text-align: center; font-size: 24px;">Ingreso a Sala de Cómputo</h2>
             
             <form th:action="@{/sala/registrar}" method="post">
                 <div class="campo-grupo">
@@ -91,10 +91,9 @@
                     <label>Seriado de Documento:</label>
                     <input type="text" name="documento" placeholder="Ej: 0123456789" required>
                 </div>
-
                 <div class="campo-grupo">
                     <label>¿Dónde te quieres sentar?</label>
-                    <select name="equipoSeleccionado" required>
+                    <select name="asiento" required>
                         <option value="" disabled selected>-- Elige un puesto --</option>
                         <option th:each="pc : ${equiposHabilitados}"
                                 th:value="${pc.sala.idSala + '::SEP::' + pc.numComputador}"
@@ -102,28 +101,16 @@
                         </option>
                     </select>
                 </div>
-
-                <button type="submit" class="btn-registro">Confirmar</button>
+                <button type="submit" class="btn-registro">Registrar Ingreso</button>
             </form>
 
             <div class="msg-resultado msg-exito" th:if="${resultado == 'bienvenido'}">
                 <h3>¡Bienvenido(a)!</h3>
                 <p>Tu ingreso ha sido registrado correctamente.</p>
             </div>
-
             <div class="msg-resultado msg-error" th:if="${resultado == 'no_admitido'}">
-                <h3>No Admitido</h3>
-                <p>No se pudo registrar el ingreso. Verifica tus datos.</p>
-            </div>
-
-            <div class="msg-resultado msg-exito" th:if="${resultado == 'salida_registrada'}">
-                <h3>Salida Registrada</h3>
-                <p>Tu salida se registró con éxito.</p>
-            </div>
-
-            <div class="msg-resultado msg-error" th:if="${resultado == 'salida_no_registrada'}">
-                <h3>Salida No Registrada</h3>
-                <p>No tienes una sesión activa.</p>
+                <h3>Acceso Denegado</h3>
+                <p>Por favor verifica tus datos.</p>
             </div>
         </div>
     </div>
