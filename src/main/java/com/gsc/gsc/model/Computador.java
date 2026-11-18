@@ -2,9 +2,6 @@ package com.gsc.gsc.model;
 
 import jakarta.persistence.*;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import com.gsc.gsc.model.enums.DisponibilidadComputador;
 
 
@@ -22,10 +19,7 @@ public class Computador {
     @JoinColumn(name = "id_sala", nullable = false)
     private Sala sala;
 
-    // Todas estas anotaciones son necesarias para que Hibernate pueda mapear
-    // correctamente el enum Disponibilidad a un tipo de dato ENUM en PostgreSQL.
     @Enumerated(EnumType.STRING)
-    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "disponibilidad", nullable = false)
     private DisponibilidadComputador disponibilidad;
 
