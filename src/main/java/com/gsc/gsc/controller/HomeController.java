@@ -36,7 +36,7 @@ public class HomeController {
         }
         
         // 3. Show public landing page to unauthenticated guests
-        return "login";
+        return "redirect:/login";
     }
     
 }

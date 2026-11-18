@@ -1,6 +1,6 @@
 package com.gsc.gsc.dto;
 
-public class AsignacionPcDTO {
+public class AsignacionPcDto {
     private String tipoAccion;
     private String documento;
     private String equipoSeleccionado;

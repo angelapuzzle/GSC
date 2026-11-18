@@ -1,6 +1,6 @@
 package com.gsc.gsc.controller;
 
-import com.gsc.gsc.dto.AsignacionPcDTO;
+import com.gsc.gsc.dto.AsignacionPcDto;
 import com.gsc.gsc.model.AppUser;
 import com.gsc.gsc.model.Computador;
 import com.gsc.gsc.model.enums.DisponibilidadComputador;
@@ -39,7 +39,7 @@ public class RoomStatusController {
     }
 
     @PostMapping("/registrar")
-    public String procesarRegistro(@ModelAttribute AsignacionPcDTO dto, Model model, Principal principal) {
+    public String procesarRegistro(@ModelAttribute AsignacionPcDto dto, Model model, Principal principal) {
         AppUser user = appUserAuthService.findByUsername(principal.getName());
         String resultado = roomStatusManager.procesarIngresoOSalida(dto);
         model.addAttribute("resultado", resultado);

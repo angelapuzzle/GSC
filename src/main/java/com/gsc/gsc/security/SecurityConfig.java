@@ -65,6 +65,8 @@ public class SecurityConfig {
                 
                 .requestMatchers("/sala/seleccionar", "/sala/monitoreo").hasAnyRole("MONITOR", "ADMIN")
 
+                .requestMatchers("/sala/reservas").hasAnyRole("MONITOR", "ADMIN")
+
                 .requestMatchers("/historial/**").hasAnyRole("MONITOR", "ADMIN")
 
                 .requestMatchers("/template_test").hasAnyRole("USER", "ADMIN")

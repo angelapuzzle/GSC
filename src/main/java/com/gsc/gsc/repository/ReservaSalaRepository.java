@@ -1,9 +1,14 @@
 package com.gsc.gsc.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.gsc.gsc.model.ReservaSala;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.time.LocalDate;
+import java.util.List;
+
 
 public interface ReservaSalaRepository extends JpaRepository<ReservaSala, Long> {
-    // Aquí se pueden definir métodos de consulta personalizados si es necesario
+
+    List<ReservaSala> findBySala_IdSalaAndFecha(String idSala, LocalDate fecha);
 
 }

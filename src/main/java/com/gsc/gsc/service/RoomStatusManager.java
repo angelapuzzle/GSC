@@ -1,6 +1,6 @@
 package com.gsc.gsc.service;
 
-import com.gsc.gsc.dto.AsignacionPcDTO;
+import com.gsc.gsc.dto.AsignacionPcDto;
 import com.gsc.gsc.model.AppUser;
 import com.gsc.gsc.model.Computador;
 import com.gsc.gsc.model.ComputadorId;
@@ -74,7 +74,7 @@ public class RoomStatusManager {
     }
 
     @Transactional
-    public String procesarIngresoOSalida(AsignacionPcDTO dto) {
+    public String procesarIngresoOSalida(AsignacionPcDto dto) {
         boolean esSalida = "SALIDA".equals(dto.getTipoAccion());
 
         if (dto.getEquipoSeleccionado() == null || !dto.getEquipoSeleccionado().contains("-")) {
