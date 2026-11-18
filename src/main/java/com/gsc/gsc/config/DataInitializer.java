@@ -68,8 +68,14 @@ public class DataInitializer implements CommandLineRunner {
         log.info("Usuario administrador inicial '{}' creado correctamente.", createdUser.getUsername());
         createdUser = appUserAuthService.registrarUsuario("user", "user123", "USER");
         log.info("Usuario creado correctamente: '{}'", createdUser.getUsername());
-        createdUser = appUserAuthService.registrarUsuario("monitor", "monitor123", "MONITOR");
-        log.info("Usuario monitor creado correctamente: '{}'", createdUser.getUsername());
+        createdUser = appUserAuthService.registrarUsuario("monitor1", "monitor1123", "MONITOR");
+        log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
+        createdUser = appUserAuthService.registrarUsuario("monitor2", "monitor2123", "MONITOR");
+        log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
+        createdUser = appUserAuthService.registrarUsuario("monitor3", "monitor3123", "MONITOR");
+        log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
+        createdUser = appUserAuthService.registrarUsuario("monitor4", "monitor4123", "MONITOR");
+        log.info("Usuario '{}' creado correctamente.", createdUser.getUsername());
 
         
     }
