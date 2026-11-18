@@ -4,10 +4,12 @@ import com.gsc.gsc.dto.AsignacionPcDTO;
 import com.gsc.gsc.model.Computador;
 import com.gsc.gsc.model.ComputadorId;
 import com.gsc.gsc.model.ReservaComputador;
+import com.gsc.gsc.model.Sala;
 import com.gsc.gsc.model.Usuario;
 import com.gsc.gsc.model.enums.DisponibilidadComputador;
 import com.gsc.gsc.repository.ComputadorRepository;
 import com.gsc.gsc.repository.ReservaComputadorRepository;
+import com.gsc.gsc.repository.SalaRepository;
 import com.gsc.gsc.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,15 @@ public class RoomStatusManager {
     @Autowired
     private ReservaComputadorRepository reservaComputadorRepository;
 
-    public List<Computador> obtenerTodosLosEquipos() {
-        return computadorRepository.findAll();
+    @Autowired
+    private SalaRepository salaRepository;
+
+    public List<Sala> obtenerTodasLasSalas() {
+        return salaRepository.findAll();
+    }
+
+    public List<Computador> obtenerEquiposPorSala(String idSala) {
+        return computadorRepository.findBySalaIdSalaOrderByNumComputadorAsc(idSala);
     }
 
     public List<Computador> obtenerEquiposSinMantenimiento() {
@@ -41,36 +50,21 @@ public class RoomStatusManager {
     }
 
     private String extraerIdSala(String username) {
-        if (username.startsWith("sala") && username.length() > 4) {
-            return username.substring(4); // Ej: "sala1" -> "1"
-        }
-        if (username.startsWith("monitor") && username.length() > 7) {
-            return username.substring(7); // Ej: "monitor1" -> "1"
+        if (username != null && username.toLowerCase().startsWith("sala") && username.length() > 4) {
+            return username.substring(4);
         }
         return "";
     }
 
     public List<Computador> obtenerEquiposDeSalaActual(String username) {
         String idSala = extraerIdSala(username);
-
         if (idSala.isEmpty()) {
             return obtenerEquiposSinMantenimiento();
         }
-
         return computadorRepository.findBySalaIdSalaAndDisponibilidadNotOrderByNumComputadorAsc(
                 idSala,
                 DisponibilidadComputador.MANTENIMIENTO
         );
-    }
-
-    public List<Computador> obtenerEquiposParaMonitoreo(String username) {
-        String idSala = extraerIdSala(username);
-
-        if (idSala.isEmpty()) {
-            return obtenerTodosLosEquipos();
-        }
-
-        return computadorRepository.findBySalaIdSalaOrderByNumComputadorAsc(idSala);
     }
 
     public long contarPorEstado(List<Computador> lista, DisponibilidadComputador estado) {

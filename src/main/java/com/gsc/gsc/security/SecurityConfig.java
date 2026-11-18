@@ -63,7 +63,7 @@ public class SecurityConfig {
                 
                 .requestMatchers("/sala/registro", "/sala/registrar").hasAnyRole("USER", "ADMIN")
                 
-                .requestMatchers("/sala/monitoreo").hasAnyRole("MONITOR", "ADMIN")
+                .requestMatchers("/sala/seleccionar", "/sala/monitoreo").hasAnyRole("MONITOR", "ADMIN")
 
                 .requestMatchers("/template_test").hasAnyRole("USER", "ADMIN")
                 
@@ -77,7 +77,7 @@ public class SecurityConfig {
                             .anyMatch(a -> a.getAuthority().equals("ROLE_MONITOR"));
                     
                     if (esAdmin || esMonitor) {
-                        response.sendRedirect("/sala/monitoreo");
+                        response.sendRedirect("/sala/seleccionar");
                     } else {
                         response.sendRedirect("/sala/registro");
                     }
