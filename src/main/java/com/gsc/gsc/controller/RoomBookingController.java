@@ -50,7 +50,7 @@ public class RoomBookingController {
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("mensajeError", "Ocurrió un error inesperado al guardar la reserva.");
         }
-
+        
         return "redirect:/sala/reservas";
     }
     
