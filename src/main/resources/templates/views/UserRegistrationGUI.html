@@ -72,13 +72,21 @@
 </head>
 <body style="background-color: #f3f4f6;">
 
-    <div th:replace="~{fragments/header :: admin-header}"></div>
+    <div th:replace="~{fragments/header :: user-header}"></div>
 
     <div style="display: flex; justify-content: center; align-items: center; min-height: 80vh;">
         <div class="reg-box">
             <h2 style="color: #677d29; text-align: center; font-size: 24px;">Ingreso a Sala de Cómputo</h2>
             
-            <form th:action="@{/template_test/registrar}" method="post">
+            <form th:action="@{/sala/registrar}" method="post">
+                <div class="campo-grupo">
+                    <label>¿Qué vas a hacer?</label>
+                    <select name="tipoAccion" required>
+                        <option value="INGRESO">Ingresar a la sala</option>
+                        <option value="SALIDA">Salir de la sala</option>
+                    </select>
+                </div>
+
                 <div class="campo-grupo">
                     <label>Seriado de Documento:</label>
                     <input type="text" name="documento" placeholder="Ej: 0123456789" required>
@@ -87,7 +95,10 @@
                     <label>¿Dónde te quieres sentar?</label>
                     <select name="asiento" required>
                         <option value="" disabled selected>-- Elige un puesto --</option>
-                        <option th:each="pc : ${equiposDisponibles}" th:value="${pc.id}" th:text="${pc.asiento}"></option>
+                        <option th:each="pc : ${equiposHabilitados}"
+                                th:value="${pc.sala.idSala + '::SEP::' + pc.numComputador}"
+                                th:text="${'Sala ' + pc.sala.idSala + ' - PC ' + pc.numComputador + ' (' + pc.disponibilidad + ')'}">
+                        </option>
                     </select>
                 </div>
                 <button type="submit" class="btn-registro">Registrar Ingreso</button>

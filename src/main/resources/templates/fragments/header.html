@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<head th:replace="~{fragments/head :: head (${title} ?: 'Layout Panel Administracion')}"></head>
 <body>
     <header class="admin-header" th:fragment="admin-header">
         <div class="section-icon">
@@ -11,9 +12,23 @@
         <div id="divider-top"></div>
         <div id="admin-header-content">
             <nav id="admin-header-nav">
-                <a href="#">Tab</a>
-                <a href="#">Tab</a>
-                <a href="#">Tab</a>
+                <a th:href="@{/sala/monitoreo}">Monitoreo de Sala</a>
+                <a th:href="@{/sala/reservas}">Reservas de Salas</a>
+                <a th:href="@{/historial}">Historial de Uso</a>
+            </nav>
+        </div>
+    </header>
+    <header class="user-header" th:fragment="user-header">
+        <div class="section-icon">
+            <div class="banner-container">
+                <a rel="noopener" class="icon-link">
+                    <img th:src="@{/images/logo_unal_circle.png}" alt="Escudo de UNAL" mime="image/png" type="image">
+                </a>
+            </div>
+        </div>
+        <div id="divider-top"></div>
+        <div id="user-header-content">
+            <p id="name-aplication">GSC - Gestor de Salas de Cómputo</p>
         </div>
     </header>
 </body>

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSC - Historial de Ingresos</title>
+    
+    <th:block th:replace="~{fragments/head :: head('GSC - Historial de Ingresos')}"></th:block>
+    
+    <style>
+        .history-container {
+            max-width: 1200px;
+            width: 95%;
+            margin: 40px auto;
+            background: white;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f3f4f6;
+            padding-bottom: 15px;
+        }
+        .history-header h2 {
+            color: #677d29;
+            font-size: 24px;
+            margin: 0;
+        }
+        .filtros-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: flex-end;
+        }
+        .campo-filtro {
+            flex: 1;
+            min-width: 190px;
+        }
+        .campo-filtro label {
+            display: block;
+            margin-bottom: 6px;
+            color: #4b5563;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        .campo-filtro input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        .campo-filtro input:focus {
+            outline: none;
+            border-color: #677d29;
+        }
+        .btn-unal {
+            background-color: #677d29;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-unal:hover {
+            background-color: #526420;
+            color: white;
+        }
+        .btn-limpiar {
+            background-color: #e5e7eb;
+            color: #374151;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .btn-limpiar:hover {
+            background-color: #d1d5db;
+            color: #111827;
+        }
+        .tabla-wrapper {
+            overflow-x: auto;
+        }
+        .tabla-historial {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 14px;
+        }
+        .tabla-historial thead {
+            background-color: #677d29;
+            color: white;
+        }
+        .tabla-historial th, .tabla-historial td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .tabla-historial tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        .badge-estado {
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .estado-activo {
+            background-color: #def7ec;
+            color: #03543f;
+            border: 1px solid #bcf0da;
+        }
+        .estado-finalizado {
+            background-color: #f3f4f6;
+            color: #4b5563;
+            border: 1px solid #d1d5db;
+        }
+        .sin-registros {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+            background-color: #f9fafb;
+            border-radius: 8px;
+            border: 1px dashed #d1d5db;
+        }
+    </style>
+</head>
+<body style="background-color: #f3f4f6;">
+
+    <div th:replace="~{fragments/header :: admin-header}"></div>
+
+    <div class="history-container">
+        <div class="history-header">
+            <h2>Historial de Uso - Sala de Cómputo</h2>
+            <span style="color: #6b7280; font-size: 14px;" 
+                  th:text="'Total de registros: ' + ${historial != null ? #lists.size(historial) : 0}">
+                Total de registros: 0
+            </span>
+        </div>
+
+        <form class="filtros-form" th:action="@{/historial}" method="get">
+            <div class="campo-filtro">
+                <label for="documento">Documento / Usuario:</label>
+                <input type="text" id="documento" name="documento" th:value="${param.documento}" placeholder="Buscar por documento o nombre...">
+            </div>
+            <div class="campo-filtro">
+                <label for="fecha">Fecha:</label>
+                <input type="date" id="fecha" name="fecha" th:value="${param.fecha}">
+            </div>
+            <div class="campo-filtro" style="max-width: 180px;">
+                <label for="puesto">Sala:</label>
+                <input type="number" id="sala" name="sala" th:value="${param.sala}" placeholder="Ej: Sala-1">
+            </div>
+            <div class="campo-filtro" style="max-width: 180px;">
+                <label for="puesto">N° Computador:</label>
+                <input type="number" id="puesto" name="puesto" th:value="${param.puesto}" placeholder="Ej: 4">
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <button type="submit" class="btn-unal">Filtrar</button>
+                <a th:href="@{/historial}" class="btn-limpiar">Limpiar</a>
+            </div>
+        </form>
+
+        <div class="tabla-wrapper" th:if="${historial != null and !#lists.isEmpty(historial)}">
+            <table class="tabla-historial">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Documento</th>
+                        <th>Usuario</th>
+                        <th>Cargo</th>
+                        <th>Sala</th>
+                        <th>Computador</th>
+                        <th>Fecha</th>
+                        <th>Hora Inicio</th>
+                        <th>Hora Fin</th>
+                        <th>Comentarios</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="reg : ${historial}">
+                        <td th:text="${reg.idReserva}">1</td>
+                        <td th:text="${reg.usuario.serialIdentidad}">0123456789</td>
+                        <td th:text="${reg.usuario.nombreCompleto}">Juan Pérez</td>
+                        <td th:text="${reg.usuario.cargo}">ESTUDIANTE</td>
+                        <td th:text="${reg.computador.sala.idSala}">SALA-1</td>
+                        <td th:text="'PC-' + ${reg.computador.numComputador}">PC-4</td>
+                        <td th:text="${reg.fecha}">2026-11-16</td>
+                        <td th:text="${reg.horaInicio}">08:15:00</td>
+                        <td th:text="${reg.horaFin != null ? reg.horaFin : '--:--'}">10:00:0

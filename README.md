@@ -54,6 +54,20 @@ docker compose up -d postgres
 ./mvnw {args}
 ```
 
+### Credenciales preconfiguradas
+
+| Rol | Username | Password | Nivel de Acceso |
+| :--- | :--- | :--- | :--- |
+| Admin | `admin` | `admin123` | Administración completa del sistema (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/registro`, `/sala/reservas`) |
+| Monitor | `monitor1` | `monitor1123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Monitor | `monitor2` | `monitor2123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Monitor | `monitor3` | `monitor3123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Monitor | `monitor4` | `monitor4123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Sala | `sala1` | `sala1123` | Registro de ingreso y salida en la Sala1 (`/sala/registro`) |
+| Sala | `sala2` | `sala2123` | Registro de ingreso y salida en la Sala2 (`/sala/registro`) |
+| Sala | `sala3` | `sala3123` | Registro de ingreso y salida en la Sala3 (`/sala/registro`) |
+| Sala | `sala4` | `sala4123` | Registro de ingreso y salida en la Sala4 (`/sala/registro`) |
+
 ## Equipo de Desarrollo
 
 * **Laura María Gómez Cabra** — `lgomezcab@unal.edu.co`

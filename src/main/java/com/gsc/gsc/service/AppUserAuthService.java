@@ -1,7 +1,5 @@
 package com.gsc.gsc.service;
 
-import org.springframework.security.access.prepost.PreAuthorize;
-
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -39,11 +37,15 @@ public class AppUserAuthService implements UserDetailsService {
                 .build();
     }
 
+    public AppUser findByUsername(String username) {
+        return appUserRepository.findByUsername(username)
+            .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+    }
+
     public boolean existsUsers() {
         return appUserRepository.count() > 0;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public AppUser registrarUsuario(String username, String rawPassword, String role) {
         if (appUserRepository.existsByUsername(username)) {
             throw new ResourceAlreadyExistsException("El usuario " + username + " ya existe");

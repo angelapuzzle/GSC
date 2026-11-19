@@ -59,11 +59,15 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/css/**", "/js/**", "/images/**", "/error", "/login", "/logout").permitAll()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/fonts/**", "/error", "/login", "/logout", "/").permitAll()
                 
                 .requestMatchers("/sala/registro", "/sala/registrar").hasAnyRole("USER", "ADMIN")
                 
-                .requestMatchers("/sala/monitoreo").hasAnyRole("MONITOR", "ADMIN")
+                .requestMatchers("/sala/seleccionar", "/sala/monitoreo").hasAnyRole("MONITOR", "ADMIN")
+
+                .requestMatchers("/sala/reservas").hasAnyRole("MONITOR", "ADMIN")
+
+                .requestMatchers("/historial/**").hasAnyRole("MONITOR", "ADMIN")
 
                 .requestMatchers("/template_test").hasAnyRole("USER", "ADMIN")
                 
@@ -71,16 +75,7 @@ public class SecurityConfig {
             )
             .formLogin(form -> form
                 .successHandler((request, response, authentication) -> {
-                    boolean esAdmin = authentication.getAuthorities().stream()
-                            .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-                    boolean esMonitor = authentication.getAuthorities().stream()
-                            .anyMatch(a -> a.getAuthority().equals("ROLE_MONITOR"));
-                    
-                    if (esAdmin || esMonitor) {
-                        response.sendRedirect("/sala/monitoreo");
-                    } else {
-                        response.sendRedirect("/sala/registro");
-                    }
+                    response.sendRedirect("/");
                 })
                 .permitAll()
             )
