@@ -54,6 +54,34 @@ docker compose up -d postgres
 ./mvnw {args}
 ```
 
+### Credenciales preconfiguradas
+
+| Rol | Username | Password | Nivel de Acceso |
+| :--- | :--- | :--- | :--- |
+| Admin | `admin` | `admin123` | Administración completa del sistema (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/registro`, `/sala/reservas`) |
+| Monitor | `monitor1` | `monitor1123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Monitor | `monitor2` | `monitor2123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Monitor | `monitor3` | `monitor3123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Monitor | `monitor4` | `monitor4123` | Seleccion sala, monitoreo de equipos y gestión de reservas (`/sala/seleccionar`, `/sala/monitoreo`, `/sala/reservas`) |
+| Sala | `sala1` | `sala1123` | Registro de ingreso y salida en la Sala1 (`/sala/registro`) |
+| Sala | `sala2` | `sala2123` | Registro de ingreso y salida en la Sala2 (`/sala/registro`) |
+| Sala | `sala3` | `sala3123` | Registro de ingreso y salida en la Sala3 (`/sala/registro`) |
+| Sala | `sala4` | `sala4123` | Registro de ingreso y salida en la Sala4 (`/sala/registro`) |
+
+## Uso de IA
+
+(Laura y Angela): Se utilizó inteligencia artificial generativa para generar el esquema de archivos inicial para el proyecto (incluyendo el pom.xml), posteriormente se utilizó para investigar a fondo como implementar cada sección en Spring Boot, sin embargo la mayoría de código fue escrito a mano utilizando a la IA para revisar la correcta escritura e implementación.
+
+(Todos los demás): Ni idea.
+
+## Crimenes de lesa humanidad
+
+No quieren saber como se ve el historial de commits de este proyecto, no hay ninguna consistencia respecto a como se estructuraron las ramas, no hay suficiente trazabilidad, y para lo que se entregó en la segunda entrega (23 de Noviembre de 2026) Ángela hizo el crimen de eliminar la rama de main y reemplazarla con (lo que sea que es esto) con tal de poder arreglar el desastre que se hizo uniendo el trabajo de todos.
+
+Incluso subir este README ya es un crimen por que técnicamente estoy haciendo commits directos a main.
+
+De consolación tomen un gato con café: 🐈☕
+
 ## Equipo de Desarrollo
 
 * **Laura María Gómez Cabra** — `lgomezcab@unal.edu.co`
