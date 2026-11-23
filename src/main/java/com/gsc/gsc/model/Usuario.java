@@ -77,4 +77,7 @@ public class Usuario {
     public void setCargo(CargoUsuario cargo) {
         this.cargo = cargo;
     }
+    public void setCargo(String cargo) {
+        this.cargo = CargoUsuario.valueOf(cargo);
+    }
 }

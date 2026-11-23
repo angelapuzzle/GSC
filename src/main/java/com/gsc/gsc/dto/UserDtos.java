@@ -1,7 +1,6 @@
 package com.gsc.gsc.dto;
 
 import com.gsc.gsc.model.Usuario;
-import com.gsc.gsc.model.enums.CargoUsuario;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,7 +25,11 @@ public interface UserDtos {
         Boolean activo,
 
         @NotNull (message = "El cargo del usuario no puede ser nulo.")
-        CargoUsuario cargo
+        @Pattern(
+            regexp = "ESTUDIANTE|DOCENTE|ADMINISTRATIVO",
+            message = "Cargo no válido. Valores permitidos: ESTUDIANTE, DOCENTE, ADMINISTRATIVO"
+        )
+        String cargo
     ) {}
 
     record UserPatchRequestDto(
@@ -42,7 +45,11 @@ public interface UserDtos {
 
         Boolean activo,
 
-        CargoUsuario cargo
+        @Pattern(
+            regexp = "ESTUDIANTE|DOCENTE|ADMINISTRATIVO",
+            message = "Cargo no válido. Valores permitidos: ESTUDIANTE, DOCENTE, ADMINISTRATIVO"
+        )
+        String cargo
     ) {}
 
     record UserResponseDto(
@@ -54,7 +61,7 @@ public interface UserDtos {
 
         Boolean activo,
 
-        CargoUsuario cargo
+        String cargo
     ) {
 
         public static UserResponseDto fromUsuario(Usuario usuario) {
@@ -63,7 +70,7 @@ public interface UserDtos {
             String nombre = usuario.getNombre();
             String apellido = usuario.getApellido();
             Boolean activo = usuario.getActivo();
-            CargoUsuario cargo = usuario.getCargo();
+            String cargo = usuario.getCargo().name();
 
             return new UserResponseDto(serialIdentidad, nombre, apellido, activo, cargo);
         }
