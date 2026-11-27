@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Set;
+
+import com.gsc.gsc.model.enums.EstadoReservaSala;
+
 import java.util.HashSet;
 
 @Entity
@@ -23,6 +26,10 @@ public class ReservaSala {
 
     @Column(nullable = false)
     private LocalTime horaFin;
+
+    @Column(name = "estado_reserva", nullable = false, length = 20, columnDefinition = "varchar(20) default 'RESERVADA'")
+    @Enumerated(EnumType.STRING)
+    private EstadoReservaSala estado = EstadoReservaSala.RESERVADA;
 
     @Column(columnDefinition = "TEXT")
     private String comentarios;
