@@ -94,6 +94,13 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- Base de datos H2 para pruebas unitarias -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
     
     <!-- Configuración del plugin de Spring Boot para empaquetar la aplicación como un JAR ejecutable -->
